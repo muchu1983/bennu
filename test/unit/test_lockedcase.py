@@ -13,6 +13,7 @@ from threading import Thread
 from united.lockedcase import LockedCase
 from united.world import World
 from united.player import Player
+from united.serverdb import SQLite3Db
 
 """
 測試 帶鎖箱 Multithreading 時確保箱內的方法執行不重疊
@@ -24,6 +25,8 @@ class LockedCaseTest(unittest.TestCase):
     def setUp(self):
         logging.basicConfig(level=logging.INFO)
         self.default_world = World()
+        db = SQLite3Db()
+        db.clearTable("player")
         
     #收尾
     def tearDown(self):

@@ -31,6 +31,8 @@ class PlayerAccountTest(unittest.TestCase):
         self.default_cli = Client()
         self.default_world.startWorld()# 啟動 server
         time.sleep(2) #等待 2 秒讓 server 啟動完全
+        db = SQLite3Db()
+        db.clearTable("player")
         
     #收尾
     def tearDown(self):

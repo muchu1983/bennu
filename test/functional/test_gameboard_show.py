@@ -10,6 +10,7 @@ import logging
 import time
 from united.world import World
 from united.client import Client
+from united.serverdb import SQLite3Db
 from united.gameboard import GameBoard
 from tkinter import Tk,Frame,Grid
 
@@ -27,6 +28,10 @@ class GameboardShowTest(unittest.TestCase):
         self.P2_cli = Client()
         self.default_world.startWorld()# 啟動 server
         time.sleep(2) #等待 2 秒讓 server 啟動完全
+        db = SQLite3Db()
+        db.clearTable("player")
+        db.clearTable("image")
+        db.clearTable("indextable")
         
     #收尾
     def tearDown(self):

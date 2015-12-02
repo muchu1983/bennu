@@ -132,8 +132,8 @@ class ImageAccessTest(unittest.TestCase):
         self.assertTrue(res_m.isValid())
         self.assertEqual("list_hyperlink_on_url", res_m.getTitle())
         self.assertEqual(0, res_m.getContents()["status"])
-        self.assertEqual(1, len(res_m.getContents("hyperlink_list")))
-        self.assertEqual("test", res_m.getContents("hyperlink_list")[0][0])
+        self.assertEqual(1, len(res_m.getContents()["hyperlink_list"]))
+        self.assertEqual("test", res_m.getContents()["hyperlink_list"][0][0])
 
 #測試開始
 if __name__ == "__main__":
