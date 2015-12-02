@@ -15,6 +15,7 @@ from PIL import Image
 from united.world import World
 from united.client import Client
 from united.message import Message
+from united.serverdb import SQLite3Db
 
 """
 測試 圖片相關 處理功能
@@ -29,6 +30,9 @@ class ImageAccessTest(unittest.TestCase):
         self.default_cli = Client()
         self.default_world.startWorld()# 啟動 server
         time.sleep(2) #等待 2 秒讓 server 啟動完全
+        db = SQLite3Db()
+        db.clearTable("image")
+        db.clearTable("indextable")
         
     #收尾
     def tearDown(self):
@@ -37,15 +41,15 @@ class ImageAccessTest(unittest.TestCase):
         self.default_world = None
         self.default_cli = None
         
-    #測試 發佈及載入 link 為 test 的圖片
+    #測試 發佈及載入 url 為 test 的圖片
     def test_post_and_load_image_data(self):
         logging.info("ImageAccessTest.test_post_and_load_image_data")
-        default_link = "test"
+        default_url = "test"
         source_img = Image.open(os.getcwd() + "\\resource\\icon.jpg")
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "post_image_data"
-            contents = {"link":"aaaaa",
+            contents = {"url":"aaaaa",
                         "image_data":"b64xxxxxxxx",
                         "image_mode":"RGB",
                         "image_size":(w,h)}
@@ -55,7 +59,7 @@ class ImageAccessTest(unittest.TestCase):
         """
         #第一部分 發佈圖片
         image_b64_data = base64.b64encode(source_img.tobytes()).decode("utf-8")
-        req_m = Message("post_image_data", {"link":default_link,
+        req_m = Message("post_image_data", {"url":default_url,
                                             "image_data":image_b64_data,
                                             "image_mode":source_img.mode,
                                             "image_size":source_img.size})
@@ -66,7 +70,7 @@ class ImageAccessTest(unittest.TestCase):
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "load_image_data"
-            contents = {"link":"aaaaa"}
+            contents = {"url":"aaaaa"}
             回傳的 message 格式
             title = "load_image_data"
             contents = {"status":0,
@@ -75,7 +79,7 @@ class ImageAccessTest(unittest.TestCase):
                         "image_size":(w,h)}
         """
         #第二部分 載入圖片
-        req_m = Message("load_image_data", {"link":default_link})
+        req_m = Message("load_image_data", {"url":default_url})
         res_m = self.default_cli.sendMessage(req_m) #送出 request
         self.assertTrue(res_m.isValid())
         self.assertEqual("load_image_data", res_m.getTitle())
@@ -88,14 +92,14 @@ class ImageAccessTest(unittest.TestCase):
         self.assertEqual(ret_img.mode, source_img.mode)
         self.assertEqual(ret_img_b64_data, image_b64_data)
         
-    #測試 建立 超連結 (root -> test)
-    def test_create_hyperlink(self):
-        logging.info("ImageAccessTest.test_create_hyperlink")
+    #測試 建立 超連結 (root -> test) 並列出 root 下的所有超連結
+    def test_create_and_list_hyperlink(self):
+        logging.info("ImageAccessTest.test_create_and_list_hyperlink")
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "create_hyperlink"
             contents = {"hyperlink":"test",
-                        "sourcelink":"root",
+                        "url":"root",
                         "json_coords":"[10,20,110,80]",
                         "shape":"rectangle",
                         "description":"XXXXXXXXXXXXX"}
@@ -103,8 +107,9 @@ class ImageAccessTest(unittest.TestCase):
             title = "create_hyperlink"
             contents = {"status":0}
         """
+        #第一部分 建立超連結
         req_m = Message("create_hyperlink", {"hyperlink":"test",
-                                             "sourcelink":"root",
+                                             "url":"root",
                                              "json_coords":json.dumps((10,20,110,80)),
                                              "shape":"rectangle",
                                              "description":"XXXXXXXXXXXXX"})
@@ -112,19 +117,23 @@ class ImageAccessTest(unittest.TestCase):
         self.assertTrue(res_m.isValid())
         self.assertEqual("create_hyperlink", res_m.getTitle())
         self.assertEqual(0, res_m.getContents()["status"])
-        
-    #測試 列出 source 下的所有 hyperlink
-    def test_list_hyperlink_on_source(self):
-        logging.info("ImageAccessTest.test_list_hyperlink_on_source")
         """
             收到的 message 格式 (status 0->ok, 1->error)
-            title = "list_hyperlink_on_source"
-            contents = {"sourcelink":"aaaaa"}
+            title = "list_hyperlink_on_url"
+            contents = {"url":"aaaaa"}
             回傳的 message 格式
-            title = "list_hyperlink_on_source"
+            title = "list_hyperlink_on_url"
             contents = {"status":0,
                         "hyperlink_list":[["hyperlink","json_coords","shape","description"],[...],...]}
         """
+        #第二部分 列出 root url 下的所有 超連結
+        req_m = Message("list_hyperlink_on_url", {"url":"root"})
+        res_m = self.default_cli.sendMessage(req_m) #送出 request
+        self.assertTrue(res_m.isValid())
+        self.assertEqual("list_hyperlink_on_url", res_m.getTitle())
+        self.assertEqual(0, res_m.getContents()["status"])
+        self.assertEqual(1, len(res_m.getContents("hyperlink_list")))
+        self.assertEqual("test", res_m.getContents("hyperlink_list")[0][0])
 
 #測試開始
 if __name__ == "__main__":

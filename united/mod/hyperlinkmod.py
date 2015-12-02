@@ -23,8 +23,9 @@ class HyperlinkMod:
     def dispatchMessage(self, message):
         message_title = message.getTitle()
         res_message = None
-        if message_title == "xxxxxxxxxxxxx":
+        if message_title == "create_hyperlink":
+            pass
+        elif: message_title == "list_hyperlink_on_url":
             pass
         return res_message
         
-    

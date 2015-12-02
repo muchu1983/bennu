@@ -31,7 +31,9 @@ class World:
                                 "player_account_login":self.accountMod,
                                 "get_logined_player":self.accountMod,
                                 "post_image_data":self.imageDataMod,
-                                "load_image_data":self.imageDataMod}
+                                "load_image_data":self.imageDataMod,
+                                "create_hyperlink":self.hyperlinkMod,
+                                "list_hyperlink_on_url":self.hyperlinkMod}
         self.loadWorldFromDb()
         
     #讀取

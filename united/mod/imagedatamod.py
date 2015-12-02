@@ -35,7 +35,7 @@ class ImageDataMod:
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "post_image_data"
-            contents = {"link":"aaaaa",
+            contents = {"url":"aaaaa",
                         "image_data":"b64xxxxxxxx",
                         "image_mode":"RGB",
                         "image_size":(w,h)}
@@ -47,7 +47,7 @@ class ImageDataMod:
         image_bytes_data = base64.b64decode(image_b64_data.encode("utf-8"))
         db = SQLite3Db()
         db.insertOne("image", [None,
-                               message.getContents()["link"],
+                               message.getContents()["url"],
                                image_bytes_data,
                                message.getContents()["image_mode"],
                                message.getContents()["image_size"][0],
@@ -60,7 +60,7 @@ class ImageDataMod:
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "load_image_data"
-            contents = {"link":"aaaaa"}
+            contents = {"url":"aaaaa"}
             回傳的 message 格式
             title = "load_image_data"
             contents = {"status":0,
@@ -70,7 +70,7 @@ class ImageDataMod:
         """
         ret_m = None
         db = SQLite3Db()
-        img_data_list = db.selectSpecify("image", {"link":message.getContents()["link"]})
+        img_data_list = db.selectSpecify("image", {"url":message.getContents()["url"]})
         if len(img_data_list) == 1: #正確 只有一筆相對應的圖片資料
             img_data = img_data_list[0]
             image_bytes_data = img_data[2]

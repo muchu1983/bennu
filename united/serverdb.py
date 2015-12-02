@@ -34,16 +34,16 @@ class SQLite3Db:
                             playerUUID TEXT,
                             playerName TEXT,
                             playerPrestige INTEGER)""")
-            c.execute("""CREATE TABLE contents
+            c.execute("""CREATE TABLE indextable
                             (id INTEGER PRIMARY KEY,
                             hyperlink TEXT,
-                            sourcelink TEXT,
+                            url TEXT,
                             coords TEXT,
                             shape TEXT,
                             description TEXT)""")
             c.execute("""CREATE TABLE image
                             (id INTEGER PRIMARY KEY,
-                            link TEXT,
+                            url TEXT,
                             data BLOB,
                             mode TEXT,
                             width INTEGER,
