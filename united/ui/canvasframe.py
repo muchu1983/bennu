@@ -6,7 +6,8 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 import os
-from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font
+import base64
+from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
 from PIL import Image,ImageTk
@@ -98,7 +99,8 @@ class CanvasFrame:
             ret_img_b64_data = res_m.getContents()["image_data"]
             ret_img_mode = res_m.getContents()["image_mode"]
             ret_img_size = res_m.getContents()["image_size"]
-            self.currentLoadedImg = Image.frombytes(ret_img_mode, ret_img_size, base64.b64decode(ret_img_b64_data.encode("utf-8")))
+            ret_img = Image.frombytes(ret_img_mode, ret_img_size, base64.b64decode(ret_img_b64_data.encode("utf-8")))
+            self.currentLoadedImg = ImageTk.PhotoImage(image=ret_img)
             self.worldCanvas.create_image(self.currentLoadedImg.width()/2, self.currentLoadedImg.height()/2, image=self.currentLoadedImg)
             self.worldCanvas.config(scrollregion=(0, 0, self.currentLoadedImg.width(), self.currentLoadedImg.height())) #設定 canvas scroll XY bar 區域
             #取得hyperlink並繪製
@@ -110,8 +112,17 @@ class CanvasFrame:
         
     #新增圖片
     def postNewImage(self):
-        print("post new image")
-        pass
+        imgFileName = filedialog.askopenfilename(filetypes=(("PNG files", "*.png"),
+                                                            ("JPEG files", "*.jpg"),
+                                                            ("GIF files", "*.gif")))
+        source_img = Image.open(imgFileName)
+        image_b64_data = base64.b64encode(source_img.tobytes()).decode("utf-8")
+        req_m = Message("post_image_data", {"url":"root",# TODO url 要透過 event 傳入
+                                            "image_data":image_b64_data,
+                                            "image_mode":source_img.mode,
+                                            "image_size":source_img.size})
+        res_m = self.board.getClient().sendMessage(req_m)
+        self.loadUrlImage("root")
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
