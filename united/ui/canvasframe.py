@@ -10,6 +10,7 @@ import base64
 from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
+from united.emoji import Emoji
 from PIL import Image,ImageTk
 
 """
@@ -24,6 +25,9 @@ class CanvasFrame:
         self.preservedCanvasWidgetId = []
         self.loginedPlayerDataId = None
         self.currentLoadedImg = None
+        self.currentLoadedUrl = None
+        self.postNewImageButtonId = None
+        self.rootUrl = "root" #首頁
         #畫布區內容
         self.canvasXBar = Scrollbar(self.frame, orient="horizontal")
         self.canvasYBar = Scrollbar(self.frame, orient="vertical")
@@ -66,16 +70,18 @@ class CanvasFrame:
         cx = self.worldCanvas.canvasx(canvas_center_x)
         cy = self.worldCanvas.canvasy(10)
         self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy))
-
-    #更新畫布資料
-    def updatePageData(self):
-        #先清除 (略過 preservedCanvasWidgetId 中的 item)
+        
+    #清除畫布內容 (保留部分 item)
+    def cleanWorldCanvas(self):
         for id in self.worldCanvas.find_withtag("all"):
             if id not in self.preservedCanvasWidgetId:
                 self.worldCanvas.delete(id)
-        #再重建
-        if self.currentLoadedImg == None:
-            self.loadUrlImage("root")
+
+    #更新畫布資料
+    def updatePageData(self):
+        self.cleanWorldCanvas()#清理畫布
+        if self.currentLoadedUrl == None: #讀取首頁 root 圖片
+            self.loadUrlImage(self.rootUrl)
         #繪製登入者資訊(一次性)
         if self.loginedPlayerDataId not in self.preservedCanvasWidgetId:
             canvas_center_x = self.worldCanvas.winfo_width()/2
@@ -92,10 +98,13 @@ class CanvasFrame:
         
     #載入 url 圖片
     def loadUrlImage(self, url):
+        if self.currentLoadedUrl != None: #清理前一個url的圖片
+            self.cleanWorldCanvas()
+        self.currentLoadedUrl = url
         req_m = Message("load_image_data", {"url":url})
         res_m = self.board.getClient().sendMessage(req_m)
         statusCode = res_m.getContents()["status"]
-        if statusCode == 0:
+        if statusCode == 0: #有找到對應於 url 的 圖片資料
             ret_img_b64_data = res_m.getContents()["image_data"]
             ret_img_mode = res_m.getContents()["image_mode"]
             ret_img_size = res_m.getContents()["image_size"]
@@ -106,27 +115,40 @@ class CanvasFrame:
             #取得hyperlink並繪製
             #self.worldCanvas.create_polygon((10,10, 10,100, 100,100, 200,10, 200,200, 100,150, 10,150), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
             #self.worldCanvas.tag_bind("area", "<Button-1>", self.hyperlinkOnClick)
-        else:
-            self.postNewImgBtn = Button(self.worldCanvas, text="新增圖片", command=self.postNewImage)
-            self.worldCanvas.create_window(self.worldCanvas.winfo_width()/2, self.worldCanvas.winfo_height()/2, window=self.postNewImgBtn)
+        else: #找不到對應於 url 的 圖片資料
+            self.folderImg = ImageTk.PhotoImage(file=Emoji(":file_folder:").getImgPath())
+            self.openFolderImg = ImageTk.PhotoImage(file=Emoji(":open_file_folder:").getImgPath())
+            self.postNewImageButtonId = self.worldCanvas.create_image(self.worldCanvas.winfo_width()/2, self.worldCanvas.winfo_height()/2, image=self.folderImg, activeimage=self.openFolderImg, tags="post_new_image_button")
+            self.worldCanvas.tag_bind("post_new_image_button", "<Button-1>", self.postNewImage)
+            self.worldCanvas.tag_bind("post_new_image_button", "<Enter>", self.hand2Cursor)
+            self.worldCanvas.tag_bind("post_new_image_button", "<Leave>", self.defaultCursor)
         
     #新增圖片
-    def postNewImage(self):
+    def postNewImage(self, event):
+        if self.postNewImageButtonId != None: #從畫布移除新增圖片按鈕
+            self.worldCanvas.delete(self.postNewImageButtonId)
+            self.worldCanvas.config(cursor="") #滑鼠指標改回預設
         imgFileName = filedialog.askopenfilename(filetypes=(("PNG files", "*.png"),
                                                             ("JPEG files", "*.jpg"),
                                                             ("GIF files", "*.gif")))
         source_img = Image.open(imgFileName)
         image_b64_data = base64.b64encode(source_img.tobytes()).decode("utf-8")
-        req_m = Message("post_image_data", {"url":"root",# TODO url 要透過 event 傳入
+        req_m = Message("post_image_data", {"url":self.currentLoadedUrl,
                                             "image_data":image_b64_data,
                                             "image_mode":source_img.mode,
                                             "image_size":source_img.size})
         res_m = self.board.getClient().sendMessage(req_m)
-        self.loadUrlImage("root")
+        self.loadUrlImage(self.currentLoadedUrl)
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
         id = event.widget.find_closest(event.x, event.y)
         print(event.widget.gettags(id))
         
+    #滑鼠指標改為 手型
+    def hand2Cursor(self, event):
+        self.worldCanvas.config(cursor="hand2")
     
+    #滑鼠指標改為 預設
+    def defaultCursor(self, event):
+        self.worldCanvas.config(cursor="")

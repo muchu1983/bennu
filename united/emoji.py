@@ -17,7 +17,8 @@ class Emoji:
     def __init__(self, short_code):
         self.shortCode = short_code
         self.pattern = re.compile(":([a-z0-9\+\-_]+):")
-        self.emoji_list = ["smile","triangular_flag_on_post","sunglasses","exclamation"]
+        self.emoji_list = ["smile","triangular_flag_on_post","sunglasses","exclamation",
+                           "file_folder","open_file_folder"]
         
     #取得圖片路徑
     def getImgPath(self):
