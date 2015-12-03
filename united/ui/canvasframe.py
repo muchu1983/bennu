@@ -22,6 +22,7 @@ class CanvasFrame:
         self.board = gameboard
         self.preservedCanvasWidgetId = []
         self.loginedPlayerDataId = None
+        self.currentLoadedImg = None
         #畫布區內容
         self.canvasXBar = Scrollbar(self.frame, orient="horizontal")
         self.canvasYBar = Scrollbar(self.frame, orient="vertical")
@@ -48,36 +49,6 @@ class CanvasFrame:
         Grid.grid_columnconfigure(self.frame, 0, weight=10)
         Grid.grid_columnconfigure(self.frame, 1, weight=0)
         Grid.grid_columnconfigure(self.frame, 2, weight=1)
-
-    #更新頁面資料 (區域的內容)
-    def updatePageData(self):
-        #先清除 (略過 preservedCanvasWidgetId 中的 item)
-        for id in self.worldCanvas.find_withtag("all"):
-            if id not in self.preservedCanvasWidgetId:
-                self.worldCanvas.delete(id)
-        #再重建
-        self.currentWorldImg = ImageTk.PhotoImage(image=Image.open(os.getcwd() + "\\resource\\world.png"))
-        self.worldCanvas.create_image(self.currentWorldImg.width()/2, self.currentWorldImg.height()/2, image=self.currentWorldImg)
-        self.worldCanvas.config(scrollregion=(0, 0, self.currentWorldImg.width(), self.currentWorldImg.height())) #設定 canvas scroll XY bar 區域
-        self.worldCanvas.create_polygon((10,10, 10,100, 100,100, 200,10, 200,200, 100,150, 10,150), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
-        self.worldCanvas.tag_bind("area", "<Button-1>", self.areaOnClick)
-        #繪製登入者資訊(一次性)
-        if self.loginedPlayerDataId not in self.preservedCanvasWidgetId:
-            canvas_center_x = self.worldCanvas.winfo_width()/2
-            cx = self.worldCanvas.canvasx(canvas_center_x)
-            cy = self.worldCanvas.canvasy(10)
-            self.loginedPlayerDataId = self.worldCanvas.create_text(cx, cy, font=font.Font(weight="bold"), fill="magenta")
-            self.preservedCanvasWidgetId.append(self.loginedPlayerDataId)
-        req_msg_3 = Message("get_logined_player", {"player_uuid":str(self.board.loginedPlayer.player_uuid)}) #取得登入玩家資料
-        res_m_3 = self.board.getClient().sendMessage(req_msg_3)
-        logined_player_name = res_m_3.getContents()["player_name"]
-        logined_player_prestige = res_m_3.getContents()["player_prestige"]
-        self.worldCanvas.itemconfig(self.loginedPlayerDataId, text="玩家:" + logined_player_name + " 聲望值:" + str(logined_player_prestige))
-        self.worldCanvas.tag_raise(self.loginedPlayerDataId)
-        
-    def areaOnClick(self, event):
-        id = event.widget.find_closest(event.x, event.y)
-        print(event.widget.gettags(id))
         
     #canvas X 位移更新
     def canvasXViewUpdate(self, *args):
@@ -94,3 +65,57 @@ class CanvasFrame:
         cx = self.worldCanvas.canvasx(canvas_center_x)
         cy = self.worldCanvas.canvasy(10)
         self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy))
+
+    #更新畫布資料
+    def updatePageData(self):
+        #先清除 (略過 preservedCanvasWidgetId 中的 item)
+        for id in self.worldCanvas.find_withtag("all"):
+            if id not in self.preservedCanvasWidgetId:
+                self.worldCanvas.delete(id)
+        #再重建
+        if self.currentLoadedImg == None:
+            self.loadUrlImage("root")
+        #繪製登入者資訊(一次性)
+        if self.loginedPlayerDataId not in self.preservedCanvasWidgetId:
+            canvas_center_x = self.worldCanvas.winfo_width()/2
+            cx = self.worldCanvas.canvasx(canvas_center_x)
+            cy = self.worldCanvas.canvasy(10)
+            self.loginedPlayerDataId = self.worldCanvas.create_text(cx, cy, font=font.Font(weight="bold"), fill="magenta")
+            self.preservedCanvasWidgetId.append(self.loginedPlayerDataId)
+        req_m = Message("get_logined_player", {"player_uuid":str(self.board.loginedPlayer.player_uuid)}) #取得登入玩家資料
+        res_m = self.board.getClient().sendMessage(req_m)
+        logined_player_name = res_m.getContents()["player_name"]
+        logined_player_prestige = res_m.getContents()["player_prestige"]
+        self.worldCanvas.itemconfig(self.loginedPlayerDataId, text="玩家:" + logined_player_name + " 聲望值:" + str(logined_player_prestige))
+        self.worldCanvas.tag_raise(self.loginedPlayerDataId)
+        
+    #載入 url 圖片
+    def loadUrlImage(self, url):
+        req_m = Message("load_image_data", {"url":url})
+        res_m = self.board.getClient().sendMessage(req_m)
+        statusCode = res_m.getContents()["status"]
+        if statusCode == 0:
+            ret_img_b64_data = res_m.getContents()["image_data"]
+            ret_img_mode = res_m.getContents()["image_mode"]
+            ret_img_size = res_m.getContents()["image_size"]
+            self.currentLoadedImg = Image.frombytes(ret_img_mode, ret_img_size, base64.b64decode(ret_img_b64_data.encode("utf-8")))
+            self.worldCanvas.create_image(self.currentLoadedImg.width()/2, self.currentLoadedImg.height()/2, image=self.currentLoadedImg)
+            self.worldCanvas.config(scrollregion=(0, 0, self.currentLoadedImg.width(), self.currentLoadedImg.height())) #設定 canvas scroll XY bar 區域
+            #取得hyperlink並繪製
+            #self.worldCanvas.create_polygon((10,10, 10,100, 100,100, 200,10, 200,200, 100,150, 10,150), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
+            #self.worldCanvas.tag_bind("area", "<Button-1>", self.hyperlinkOnClick)
+        else:
+            self.postNewImgBtn = Button(self.worldCanvas, text="新增圖片", command=self.postNewImage)
+            self.worldCanvas.create_window(self.worldCanvas.winfo_width()/2, self.worldCanvas.winfo_height()/2, window=self.postNewImgBtn)
+        
+    #新增圖片
+    def postNewImage(self):
+        print("post new image")
+        pass
+        
+    #點擊超連結
+    def hyperlinkOnClick(self, event):
+        id = event.widget.find_closest(event.x, event.y)
+        print(event.widget.gettags(id))
+        
+    
