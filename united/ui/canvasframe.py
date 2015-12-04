@@ -147,7 +147,7 @@ class CanvasFrame:
         
     #建立超連結區塊
     def setHyperlinkArea(self):
-        self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_hyperlink_area")
+        areaid = self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_hyperlink_area")
         self.worldCanvas.bind("<Motion>", self.moveSettingHyperlinkArea)
         self.worldCanvas.bind("<Button-1>", self.anchorSettingHyperlinkArea)
         
@@ -161,10 +161,10 @@ class CanvasFrame:
     #已定位好 超連結區塊 開始輸入資料
     def anchorSettingHyperlinkArea(self, event):
         self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
+        self.worldCanvas.unbind("<Button-1>")
         areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
         areabbox = self.worldCanvas.bbox(areaid)
-        self.hyperlinktop = HyperlinkToplevel(self.frame, self.board, self.currentLoadedUrl, areabbox) #顯示 超連結資料輸入 Toplevel
-        #TODO 修改 setting_hyperlink_area 的屬性 新的tag及紀錄 description
+        self.hyperlinktop = HyperlinkToplevel(self.worldCanvas, self.board, self.currentLoadedUrl, areabbox) #顯示 超連結資料輸入 Toplevel
         
     #點擊超連結
     def hyperlinkOnClick(self, event):

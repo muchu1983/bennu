@@ -18,6 +18,7 @@ class HyperlinkToplevel:
 
     #建構子
     def __init__(self, master, gameboard, currentUrl, coords):
+        self.canvas = master
         self.gameboard = gameboard
         topWidth = 400
         topHeight = 400
@@ -30,6 +31,8 @@ class HyperlinkToplevel:
         self.shape = "rectangel" #暫定 只提供矩型超連結
         self.masterUrl = currentUrl #擁有當前 hyperlink 的 url 圖片 (也可稱為 master url)
         self.coords = coords
+        self.hyperlinkUrl = None #由玩家輸入 連結名稱
+        self.description = "" #由玩家輸入 簡介
         #版面規劃
         hyperlinkTopTitleL = Label(self.hyperlinkTop, text="連結區塊資料")
         hyperlinkL = Label(self.hyperlinkTop, text="連結名稱")
@@ -52,12 +55,15 @@ class HyperlinkToplevel:
         Grid.columnconfigure(self.hyperlinkTop, 1 ,weight=1)
         
     def createHyperlink(self):
-        hyperlink = self.hyperlinkE.get()
-        description = self.descT.get(1.0, "end")
-        data=(hyperlink,
+        self.hyperlinkUrl = self.hyperlinkE.get()
+        self.description = self.descT.get(1.0, "end")
+        self.canvas.addtag_withtag(self.hyperlinkUrl, "setting_hyperlink_area")
+        self.canvas.dtag(self.hyperlinkUrl, "setting_hyperlink_area")
+        data=(self.hyperlinkUrl,
               self.masterUrl,
               self.shape,
               self.coords,
-              description)
+              self.description)
         print(data)
         self.hyperlinkTop.destroy()
+        
