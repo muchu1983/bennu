@@ -117,7 +117,7 @@ class CanvasFrame:
             self.worldCanvas.create_image(self.currentLoadedImg.width()/2, self.currentLoadedImg.height()/2, image=self.currentLoadedImg)
             self.worldCanvas.config(scrollregion=(0, 0, self.currentLoadedImg.width(), self.currentLoadedImg.height())) #設定 canvas scroll XY bar 區域
             #取得hyperlink並繪製
-            #self.worldCanvas.create_polygon((10,10, 10,100, 100,100, 200,10, 200,200, 100,150, 10,150), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
+            #self.worldCanvas.create_polygon((10,10, 10,100,), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
             #self.worldCanvas.tag_bind("area", "<Button-1>", self.hyperlinkOnClick)
         else: #找不到對應於 url 的 圖片資料
             self.folderImg = ImageTk.PhotoImage(file=Emoji(":file_folder:").getImgPath())
@@ -146,8 +146,16 @@ class CanvasFrame:
         
     #建立超連結區塊
     def setHyperlinkArea(self):
+        self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_area")
+        self.worldCanvas.bind("<Motion>", self.moveSettingHyperlinkArea)
         
-    
+    #讓正建立中的區塊隨滑鼠指標移動
+    def moveSettingHyperlinkArea(self, event):
+        cx = self.worldCanvas.canvasx(event.x)
+        cy = self.worldCanvas.canvasx(event.y)
+        areaid = self.worldCanvas.find_withtag("setting_area")
+        self.worldCanvas.coords(areaid, (cx, cy, cx+50, cy+50))
+        
     #點擊超連結
     def hyperlinkOnClick(self, event):
         id = event.widget.find_closest(event.x, event.y)
