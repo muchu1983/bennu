@@ -11,6 +11,7 @@ from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
 from united.emoji import Emoji
+from united.ui.hyperlinktoplevel import HyperlinkToplevel
 from PIL import Image,ImageTk
 
 """
@@ -46,7 +47,7 @@ class CanvasFrame:
         #下右 命令框內容
         commandFrame = Frame(self.frame, bg="red")
         commandFrame.grid(row=2, column=2, rowspan=2, columnspan=1, sticky="news")
-        setHyperlinkAreaBtn = Button(commandFrame, text="建立\n連結區", command=self.setHyperlinkArea)
+        setHyperlinkAreaBtn = Button(commandFrame, text="新增\n連結區塊", command=self.setHyperlinkArea)
         setHyperlinkAreaBtn.grid(row=0, column=0, rowspan=1, columnspan=1, padx=5, pady=5, sticky="news")
         Grid.grid_rowconfigure(commandFrame, 0, weight=1)
         Grid.grid_columnconfigure(commandFrame, 0, weight=1)
@@ -160,7 +161,9 @@ class CanvasFrame:
     #已定位好 超連結區塊 開始輸入資料
     def anchorSettingHyperlinkArea(self, event):
         self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
-        
+        areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
+        self.hyperlinktop = HyperlinkToplevel(self.frame, self.board) #顯示 超連結資料輸入 Toplevel
+        #TODO 送出 create_hyperlink
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
