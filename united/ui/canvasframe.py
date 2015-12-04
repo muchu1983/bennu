@@ -146,15 +146,21 @@ class CanvasFrame:
         
     #建立超連結區塊
     def setHyperlinkArea(self):
-        self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_area")
+        self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_hyperlink_area")
         self.worldCanvas.bind("<Motion>", self.moveSettingHyperlinkArea)
+        self.worldCanvas.bind("<Button-1>", self.anchorSettingHyperlinkArea)
         
-    #讓正建立中的區塊隨滑鼠指標移動
+    #讓正建立中的 超連結區塊 隨滑鼠指標移動
     def moveSettingHyperlinkArea(self, event):
         cx = self.worldCanvas.canvasx(event.x)
         cy = self.worldCanvas.canvasy(event.y)
-        areaid = self.worldCanvas.find_withtag("setting_area")
+        areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
         self.worldCanvas.coords(areaid, (cx, cy, cx+50, cy+50))
+        
+    #已定位好 超連結區塊 開始輸入資料
+    def anchorSettingHyperlinkArea(self, event):
+        self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
+        
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
