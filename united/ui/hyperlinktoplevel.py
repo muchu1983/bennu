@@ -8,6 +8,7 @@ This file is part of BSD license
 import uuid
 import base64
 import time
+import logging
 from united.message import Message
 from tkinter import Toplevel,Frame,Label,Entry,Button,Grid,Text
 
@@ -18,6 +19,7 @@ class HyperlinkToplevel:
 
     #建構子
     def __init__(self, master, gameboard, currentUrl, coords):
+        logging.basicConfig(level=logging.INFO)
         self.canvas = master
         self.gameboard = gameboard
         topWidth = 400
@@ -59,11 +61,12 @@ class HyperlinkToplevel:
         self.description = self.descT.get(1.0, "end")
         self.canvas.addtag_withtag(self.hyperlinkUrl, "setting_hyperlink_area")
         self.canvas.dtag(self.hyperlinkUrl, "setting_hyperlink_area")
-        data=(self.hyperlinkUrl,
+        hyperlinkData=(self.hyperlinkUrl,
               self.masterUrl,
               self.shape,
               self.coords,
               self.description)
-        print(data)
+        logging.info(hyperlinkData)
         self.hyperlinkTop.destroy()
+        
         
