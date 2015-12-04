@@ -36,7 +36,7 @@ class HyperlinkMod:
             收到的 message 格式 (status 0->ok, 1->error)
             title = "create_hyperlink"
             contents = {"hyperlink":"test",
-                        "url":"root",
+                        "masterurl":"root",
                         "json_coords":"[10,20,110,80]",
                         "shape":"rectangle",
                         "description":"XXXXXXXXXXXXX"}
@@ -47,26 +47,26 @@ class HyperlinkMod:
         db = SQLite3Db()
         db.insertOne("indextable", [None,
                                     message.getContents()["hyperlink"],
-                                    message.getContents()["url"],
+                                    message.getContents()["masterurl"],
                                     message.getContents()["json_coords"],
                                     message.getContents()["shape"],
                                     message.getContents()["description"]])
         ret_m = Message("create_hyperlink", {"status":0})
         return ret_m
     
-    #列出 url 下的所有超連結
+    #列出 master url 下的所有超連結
     def listHyperlinkOnUrl(self, message):
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "list_hyperlink_on_url"
-            contents = {"url":"aaaaa"}
+            contents = {"masterurl":"aaaaa"}
             回傳的 message 格式
             title = "list_hyperlink_on_url"
             contents = {"status":0,
                         "hyperlink_list":[["hyperlink","json_coords","shape","description"],[...],...]}
         """
         db = SQLite3Db()
-        hl_list = db.selectSpecify("indextable", {"url":message.getContents()["url"]})
+        hl_list = db.selectSpecify("indextable", {"masterurl":message.getContents()["masterurl"]})
         hyperlink_data_list = []
         for hl in hl_list:
             hl_data = [hl[1], hl[3], hl[4], hl[5]]

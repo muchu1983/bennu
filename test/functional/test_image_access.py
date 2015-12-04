@@ -99,7 +99,7 @@ class ImageAccessTest(unittest.TestCase):
             收到的 message 格式 (status 0->ok, 1->error)
             title = "create_hyperlink"
             contents = {"hyperlink":"test",
-                        "url":"root",
+                        "masterurl":"root",
                         "json_coords":"[10,20,110,80]",
                         "shape":"rectangle",
                         "description":"XXXXXXXXXXXXX"}
@@ -109,7 +109,7 @@ class ImageAccessTest(unittest.TestCase):
         """
         #第一部分 建立超連結
         req_m = Message("create_hyperlink", {"hyperlink":"test",
-                                             "url":"root",
+                                             "masterurl":"root",
                                              "json_coords":json.dumps((10,20,110,80)),
                                              "shape":"rectangle",
                                              "description":"XXXXXXXXXXXXX"})
@@ -120,14 +120,14 @@ class ImageAccessTest(unittest.TestCase):
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "list_hyperlink_on_url"
-            contents = {"url":"aaaaa"}
+            contents = {"masterurl":"aaaaa"}
             回傳的 message 格式
             title = "list_hyperlink_on_url"
             contents = {"status":0,
                         "hyperlink_list":[["hyperlink","json_coords","shape","description"],[...],...]}
         """
         #第二部分 列出 root url 下的所有 超連結
-        req_m = Message("list_hyperlink_on_url", {"url":"root"})
+        req_m = Message("list_hyperlink_on_url", {"masterurl":"root"})
         res_m = self.default_cli.sendMessage(req_m) #送出 request
         self.assertTrue(res_m.isValid())
         self.assertEqual("list_hyperlink_on_url", res_m.getTitle())

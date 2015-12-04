@@ -162,8 +162,9 @@ class CanvasFrame:
     def anchorSettingHyperlinkArea(self, event):
         self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
         areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
-        self.hyperlinktop = HyperlinkToplevel(self.frame, self.board) #顯示 超連結資料輸入 Toplevel
-        #TODO 送出 create_hyperlink
+        areabbox = self.worldCanvas.bbox(areaid)
+        self.hyperlinktop = HyperlinkToplevel(self.frame, self.board, self.currentLoadedUrl, areabbox) #顯示 超連結資料輸入 Toplevel
+        #TODO 修改 setting_hyperlink_area 的屬性 新的tag及紀錄 description
         
     #點擊超連結
     def hyperlinkOnClick(self, event):

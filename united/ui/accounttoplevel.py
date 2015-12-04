@@ -34,7 +34,7 @@ class AccountToplevel:
         self.accPage = {"login_page":self.loginFrame,"register_page":self.registerFrame}
         Grid.rowconfigure(self.accountTop, 0 ,weight=1)
         Grid.columnconfigure(self.accountTop, 0 ,weight=1)
-        # login frame 規劃
+        # login frame 版面規劃
         logL = Label(self.loginFrame, text="玩家登入")
         self.logStatusL = Label(self.loginFrame, text="status")
         logAccNameL = Label(self.loginFrame, text="輸入帳號")
@@ -59,7 +59,7 @@ class AccountToplevel:
         Grid.grid_rowconfigure(self.loginFrame, 5 ,weight=0)
         Grid.grid_columnconfigure(self.loginFrame, 0 ,weight=0)
         Grid.grid_columnconfigure(self.loginFrame, 1 ,weight=1)
-        # register frame 規劃
+        # register frame 版面規劃
         regL = Label(self.registerFrame, text="註冊新帳號")
         self.regStatusL = Label(self.registerFrame, text="status")
         regAccNameL = Label(self.registerFrame, text="名稱")

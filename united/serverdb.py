@@ -37,7 +37,7 @@ class SQLite3Db:
             c.execute("""CREATE TABLE indextable
                             (id INTEGER PRIMARY KEY,
                             hyperlink TEXT,
-                            url TEXT,
+                            masterurl TEXT,
                             coords TEXT,
                             shape TEXT,
                             description TEXT)""")
