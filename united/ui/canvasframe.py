@@ -46,6 +46,10 @@ class CanvasFrame:
         #下右 命令框內容
         commandFrame = Frame(self.frame, bg="red")
         commandFrame.grid(row=2, column=2, rowspan=2, columnspan=1, sticky="news")
+        setHyperlinkAreaBtn = Button(commandFrame, text="建立\n連結區", command=self.setHyperlinkArea)
+        setHyperlinkAreaBtn.grid(row=0, column=0, rowspan=1, columnspan=1, padx=5, pady=5, sticky="news")
+        Grid.grid_rowconfigure(commandFrame, 0, weight=1)
+        Grid.grid_columnconfigure(commandFrame, 0, weight=1)
         # 分配 grid 的比重
         Grid.grid_rowconfigure(self.frame, 0, weight=1)
         Grid.grid_rowconfigure(self.frame, 1, weight=5)
@@ -140,6 +144,10 @@ class CanvasFrame:
         res_m = self.board.getClient().sendMessage(req_m)
         self.loadUrlImage(self.currentLoadedUrl)
         
+    #建立超連結區塊
+    def setHyperlinkArea(self):
+        
+    
     #點擊超連結
     def hyperlinkOnClick(self, event):
         id = event.widget.find_closest(event.x, event.y)
