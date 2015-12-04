@@ -152,7 +152,7 @@ class CanvasFrame:
     #讓正建立中的區塊隨滑鼠指標移動
     def moveSettingHyperlinkArea(self, event):
         cx = self.worldCanvas.canvasx(event.x)
-        cy = self.worldCanvas.canvasx(event.y)
+        cy = self.worldCanvas.canvasy(event.y)
         areaid = self.worldCanvas.find_withtag("setting_area")
         self.worldCanvas.coords(areaid, (cx, cy, cx+50, cy+50))
         
