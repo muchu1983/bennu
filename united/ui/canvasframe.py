@@ -9,7 +9,7 @@ import os
 import base64
 import logging
 import json
-from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
+from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog,StringVar
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
 from united.emoji import Emoji
@@ -30,6 +30,7 @@ class CanvasFrame:
         self.loginedPlayerDataId = None
         self.currentLoadedImg = None
         self.currentLoadedUrl = None
+        self.currentLoadedHyperlinkDescriptionDict = {}
         self.postNewImageButtonId = None
         self.rootUrl = "root" #首頁
         self.tempTag = "setting_hyperlink_area"
@@ -48,6 +49,15 @@ class CanvasFrame:
         #中右 描述框內容
         self.descriptionFrame = Frame(self.frame, bg="yellow")
         self.descriptionFrame.grid(row=1, column=2, rowspan=1, columnspan=1, sticky="news")
+        self.hyperlinkNameVar = StringVar()
+        self.hyperlinkDescVar = StringVar()
+        hyperlinkNameL = Label(self.descriptionFrame, textvariable=self.hyperlinkNameVar)
+        hyperlinkDescTkM = TkMessage(self.descriptionFrame, textvariable=self.hyperlinkDescVar)
+        hyperlinkNameL.grid(row=0, column=0, rowspan=1, columnspan=1, sticky="news")
+        hyperlinkDescTkM.grid(row=1, column=0, rowspan=1, columnspan=1, sticky="news")
+        Grid.grid_rowconfigure(self.descriptionFrame, 0, weight=1)
+        Grid.grid_rowconfigure(self.descriptionFrame, 1, weight=5)
+        Grid.grid_columnconfigure(self.descriptionFrame, 0, weight=1)
         #下右 命令框內容
         commandFrame = Frame(self.frame, bg="red")
         commandFrame.grid(row=2, column=2, rowspan=2, columnspan=1, sticky="news")
@@ -110,6 +120,7 @@ class CanvasFrame:
         if self.currentLoadedUrl != None: #清理前一個url的圖片
             self.cleanWorldCanvas()
         self.currentLoadedUrl = url
+        self.currentLoadedHyperlinkDescriptionDict = {}
         req_m = Message("load_image_data", {"url":url})
         res_m = self.board.getClient().sendMessage(req_m)
         statusCode = res_m.getContents()["status"]
@@ -188,13 +199,24 @@ class CanvasFrame:
         # bind 事件 到 hyperlink 區塊上
         self.worldCanvas.tag_bind(hyperlinkUrl, "<Button-1>", self.hyperlinkOnClick)
         self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
-        self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.defaultCursor)
-        #TODO 動態顯示到 canvasframe 右中的 description frame
+        self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.mouseLeaveHyperlinkArea)
+        #紀錄超連結描述資料
+        self.currentLoadedHyperlinkDescriptionDict[hyperlinkUrl] = description
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
         id = event.widget.find_closest(event.x, event.y)
-        print(event.widget.gettags(id))
+        #nextLoadedUrl = event.widget.gettags(id)[0]
+        id = event.widget.find_closest(event.x, event.y)
+        tags = event.widget.gettags(id)
+        self.hyperlinkNameVar.set(tags[0])
+        self.hyperlinkDescVar.set(self.currentLoadedHyperlinkDescriptionDict[tags[0]])
+        
+    #滑鼠離開超連結區塊
+    def mouseLeaveHyperlinkArea(self, event):
+        self.worldCanvas.config(cursor="")
+        self.hyperlinkNameVar.set("")
+        self.hyperlinkDescVar.set("")
         
     #滑鼠指標改為 手型
     def hand2Cursor(self, event):
