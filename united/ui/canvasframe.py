@@ -148,6 +148,7 @@ class CanvasFrame:
                 self.currentLoadedHyperlinkDescriptionDict[hyperlinkUrl] = description
                 # bind 事件 到 hyperlink 區塊上
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Button-1>", self.hyperlinkOnClick)
+                self.worldCanvas.tag_bind(hyperlinkUrl, "<Double-Button-1>", self.hyperlinkOnDoubleClick)
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.mouseLeaveHyperlinkArea)
         else: #找不到對應於 url 的 圖片資料
@@ -214,6 +215,7 @@ class CanvasFrame:
         res_m = self.board.getClient().sendMessage(req_m) #送出 create_hyperlink
         # bind 事件 到 hyperlink 區塊上
         self.worldCanvas.tag_bind(hyperlinkUrl, "<Button-1>", self.hyperlinkOnClick)
+        self.worldCanvas.tag_bind(hyperlinkUrl, "<Double-Button-1>", self.hyperlinkOnDoubleClick)
         self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
         self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.mouseLeaveHyperlinkArea)
         #紀錄超連結描述資料
@@ -221,19 +223,26 @@ class CanvasFrame:
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
-        id = event.widget.find_closest(event.x, event.y)
-        #nextLoadedUrl = event.widget.gettags(id)[0]
-        id = event.widget.find_closest(event.x, event.y)
+        cx = self.worldCanvas.canvasx(event.x)
+        cy = self.worldCanvas.canvasy(event.y)
+        id = event.widget.find_closest(cx, cy)
         tags = event.widget.gettags(id)
         self.hyperlinkNameVar.set(tags[0])
         self.hyperlinkDescVar.set(self.currentLoadedHyperlinkDescriptionDict[tags[0]])
-        # TODO loadUrlImage(tags[0])
         
     #滑鼠離開超連結區塊
     def mouseLeaveHyperlinkArea(self, event):
         self.worldCanvas.config(cursor="")
         self.hyperlinkNameVar.set("")
         self.hyperlinkDescVar.set("")
+        
+    #雙擊 超連結
+    def hyperlinkOnDoubleClick(self, event):
+        cx = self.worldCanvas.canvasx(event.x)
+        cy = self.worldCanvas.canvasy(event.y)
+        id = event.widget.find_closest(cx, cy)
+        nextLoadedUrl = event.widget.gettags(id)[0]
+        self.loadUrlImage(nextLoadedUrl)
         
     #滑鼠指標改為 手型
     def hand2Cursor(self, event):
