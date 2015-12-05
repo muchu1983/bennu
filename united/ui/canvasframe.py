@@ -31,6 +31,7 @@ class CanvasFrame:
         self.currentLoadedUrl = None
         self.postNewImageButtonId = None
         self.rootUrl = "root" #首頁
+        self.tempTag = "setting_hyperlink_area"
         #畫布區內容
         self.canvasXBar = Scrollbar(self.frame, orient="horizontal")
         self.canvasYBar = Scrollbar(self.frame, orient="vertical")
@@ -149,27 +150,27 @@ class CanvasFrame:
         
     #建立超連結區塊
     def setHyperlinkArea(self):
-        areaid = self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", stipple="gray12", tag="setting_hyperlink_area")
-        self.worldCanvas.bind("<Motion>", self.moveSettingHyperlinkArea)
-        self.worldCanvas.bind("<Button-1>", self.anchorSettingHyperlinkArea)
+        areaid = self.worldCanvas.create_rectangle((0,0,50,50), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag=self.tempTag)
+        self.worldCanvas.bind("<Motion>", self.moveSettingHyperlinkArea) #偵測移動位置
+        self.worldCanvas.bind("<Button-1>", self.anchorSettingHyperlinkArea) #以滑鼠右鍵定位
         
     #讓正建立中的 超連結區塊 隨滑鼠指標移動
     def moveSettingHyperlinkArea(self, event):
         cx = self.worldCanvas.canvasx(event.x)
         cy = self.worldCanvas.canvasy(event.y)
-        areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
+        areaid = self.worldCanvas.find_withtag(self.tempTag)
         self.worldCanvas.coords(areaid, (cx, cy, cx+50, cy+50))
         
     #已定位好 超連結區塊 開始輸入資料
     def anchorSettingHyperlinkArea(self, event):
         self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
-        self.worldCanvas.unbind("<Button-1>")
+        self.worldCanvas.unbind("<Button-1>") #已定位好
         self.hyperlinkTop = HyperlinkToplevel(self.worldCanvas, self) #顯示 超連結資料輸入 Toplevel
         
     #建立超連結
     def createHyperlink(self, shape, hyperlinkUrl, description):
-        self.worldCanvas.addtag_withtag(hyperlinkUrl, "setting_hyperlink_area") #改變 tag 為 hyperlink
-        self.worldCanvas.dtag(hyperlinkUrl, "setting_hyperlink_area") #移除 原有的 tag
+        self.worldCanvas.addtag_withtag(hyperlinkUrl, self.tempTag) #改變 tag 為 hyperlink
+        self.worldCanvas.dtag(hyperlinkUrl, self.tempTag) #移除 原有的 tag
         hyperlinkCoords = self.worldCanvas.bbox(hyperlinkUrl)
         hyperlinkData=(hyperlinkUrl,
               self.currentLoadedUrl,
@@ -178,6 +179,7 @@ class CanvasFrame:
               description)
         logging.info(hyperlinkData)
         self.hyperlinkTop.closeToplevel()
+        #TODO 送出 create_hyperlink message
         #TODO 動態顯示到 canvasframe 右中的 description frame
         
     #點擊超連結
