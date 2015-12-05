@@ -179,7 +179,6 @@ class CanvasFrame:
               hyperlinkCoords,
               description)
         logging.info(hyperlinkData)
-        self.hyperlinkTop.closeToplevel()
         req_m = Message("create_hyperlink", {"hyperlink":hyperlinkUrl,
                                              "masterurl":self.currentLoadedUrl,
                                              "json_coords":json.dumps(hyperlinkCoords),
