@@ -99,8 +99,6 @@ class CanvasFrame:
     #更新畫布資料
     def updatePageData(self):
         self.cleanWorldCanvas()#清理畫布
-        if self.currentLoadedUrl == None: #讀取首頁 root 圖片
-            self.loadUrlImage(self.rootUrl)
         #繪製登入者資訊(一次性)
         if self.loginedPlayerDataId not in self.preservedCanvasWidgetId:
             canvas_center_x = self.worldCanvas.winfo_width()/2
@@ -113,7 +111,9 @@ class CanvasFrame:
         logined_player_name = res_m.getContents()["player_name"]
         logined_player_prestige = res_m.getContents()["player_prestige"]
         self.worldCanvas.itemconfig(self.loginedPlayerDataId, text="玩家:" + logined_player_name + " 聲望值:" + str(logined_player_prestige))
-        self.worldCanvas.tag_raise(self.loginedPlayerDataId)
+        #讀取首頁 root 圖片
+        if self.currentLoadedUrl == None: 
+            self.loadUrlImage(self.rootUrl)
         
     #載入 url 圖片
     def loadUrlImage(self, url):
@@ -121,20 +121,35 @@ class CanvasFrame:
             self.cleanWorldCanvas()
         self.currentLoadedUrl = url
         self.currentLoadedHyperlinkDescriptionDict = {}
-        req_m = Message("load_image_data", {"url":url})
-        res_m = self.board.getClient().sendMessage(req_m)
-        statusCode = res_m.getContents()["status"]
+        req_m_1 = Message("load_image_data", {"url":self.currentLoadedUrl})
+        res_m_1 = self.board.getClient().sendMessage(req_m_1)
+        statusCode = res_m_1.getContents()["status"]
         if statusCode == 0: #有找到對應於 url 的 圖片資料
-            ret_img_b64_data = res_m.getContents()["image_data"]
-            ret_img_mode = res_m.getContents()["image_mode"]
-            ret_img_size = res_m.getContents()["image_size"]
+            ret_img_b64_data = res_m_1.getContents()["image_data"]
+            ret_img_mode = res_m_1.getContents()["image_mode"]
+            ret_img_size = res_m_1.getContents()["image_size"]
             ret_img = Image.frombytes(ret_img_mode, ret_img_size, base64.b64decode(ret_img_b64_data.encode("utf-8")))
             self.currentLoadedImg = ImageTk.PhotoImage(image=ret_img)
             self.worldCanvas.create_image(self.currentLoadedImg.width()/2, self.currentLoadedImg.height()/2, image=self.currentLoadedImg)
             self.worldCanvas.config(scrollregion=(0, 0, self.currentLoadedImg.width(), self.currentLoadedImg.height())) #設定 canvas scroll XY bar 區域
-            #取得hyperlink並繪製
-            #self.worldCanvas.create_polygon((10,10, 10,100,), fill="blue", activefill="green", stipple="gray12", activestipple="gray75", tag="area")
-            #self.worldCanvas.tag_bind("area", "<Button-1>", self.hyperlinkOnClick)
+            #取得目前 url 下的所有 hyperlink 並繪製
+            req_m_2 = Message("list_hyperlink_on_url", {"masterurl":self.currentLoadedUrl})
+            res_m_2 = self.board.getClient().sendMessage(req_m_2) #送出 list_hyperlink_on_url
+            hyperlinkList = res_m_2.getContents()["hyperlink_list"]
+            for h in hyperlinkList:
+                #h = ["hyperlink","json_coords","shape","description"]
+                hyperlinkUrl = h[0]
+                coords = json.loads(h[1])
+                description = h[3]
+                self.worldCanvas.create_rectangle((coords[0],coords[1],coords[2],coords[3]),
+                                                    fill="blue", activefill="green",
+                                                    stipple="gray12", activestipple="gray75",
+                                                    tag=hyperlinkUrl)
+                self.currentLoadedHyperlinkDescriptionDict[hyperlinkUrl] = description
+                # bind 事件 到 hyperlink 區塊上
+                self.worldCanvas.tag_bind(hyperlinkUrl, "<Button-1>", self.hyperlinkOnClick)
+                self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
+                self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.mouseLeaveHyperlinkArea)
         else: #找不到對應於 url 的 圖片資料
             self.folderImg = ImageTk.PhotoImage(file=Emoji(":file_folder:").getImgPath())
             self.openFolderImg = ImageTk.PhotoImage(file=Emoji(":open_file_folder:").getImgPath())
@@ -142,6 +157,7 @@ class CanvasFrame:
             self.worldCanvas.tag_bind("post_new_image_button", "<Button-1>", self.postNewImage)
             self.worldCanvas.tag_bind("post_new_image_button", "<Enter>", self.hand2Cursor)
             self.worldCanvas.tag_bind("post_new_image_button", "<Leave>", self.defaultCursor)
+        self.worldCanvas.tag_raise(self.loginedPlayerDataId) #將被圖片蓋住的 使用者資料 移到最上層
         
     #新增圖片
     def postNewImage(self, event):
@@ -211,6 +227,7 @@ class CanvasFrame:
         tags = event.widget.gettags(id)
         self.hyperlinkNameVar.set(tags[0])
         self.hyperlinkDescVar.set(self.currentLoadedHyperlinkDescriptionDict[tags[0]])
+        # TODO loadUrlImage(tags[0])
         
     #滑鼠離開超連結區塊
     def mouseLeaveHyperlinkArea(self, event):
