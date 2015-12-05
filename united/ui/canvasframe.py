@@ -7,6 +7,7 @@ This file is part of BSD license
 """
 import os
 import base64
+import logging
 from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
@@ -21,6 +22,7 @@ class CanvasFrame:
 
     #構建子
     def __init__(self, master, gameboard):
+        logging.basicConfig(level=logging.INFO)
         self.frame = Frame(master)
         self.board = gameboard
         self.preservedCanvasWidgetId = []
@@ -162,9 +164,21 @@ class CanvasFrame:
     def anchorSettingHyperlinkArea(self, event):
         self.worldCanvas.unbind("<Motion>") #停止移動 超連結區塊
         self.worldCanvas.unbind("<Button-1>")
-        areaid = self.worldCanvas.find_withtag("setting_hyperlink_area")
-        areabbox = self.worldCanvas.bbox(areaid)
-        self.hyperlinktop = HyperlinkToplevel(self.worldCanvas, self.board, self.currentLoadedUrl, areabbox) #顯示 超連結資料輸入 Toplevel
+        self.hyperlinkTop = HyperlinkToplevel(self.worldCanvas, self) #顯示 超連結資料輸入 Toplevel
+        
+    #建立超連結
+    def createHyperlink(self, shape, hyperlinkUrl, description):
+        self.worldCanvas.addtag_withtag(hyperlinkUrl, "setting_hyperlink_area") #改變 tag 為 hyperlink
+        self.worldCanvas.dtag(hyperlinkUrl, "setting_hyperlink_area") #移除 原有的 tag
+        hyperlinkCoords = self.worldCanvas.bbox(hyperlinkUrl)
+        hyperlinkData=(hyperlinkUrl,
+              self.currentLoadedUrl,
+              shape,
+              hyperlinkCoords,
+              description)
+        logging.info(hyperlinkData)
+        self.hyperlinkTop.closeToplevel()
+        #TODO 動態顯示到 canvasframe 右中的 description frame
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
