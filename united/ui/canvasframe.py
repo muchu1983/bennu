@@ -8,6 +8,7 @@ This file is part of BSD license
 import os
 import base64
 import logging
+import json
 from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
@@ -179,7 +180,16 @@ class CanvasFrame:
               description)
         logging.info(hyperlinkData)
         self.hyperlinkTop.closeToplevel()
-        #TODO 送出 create_hyperlink message
+        req_m = Message("create_hyperlink", {"hyperlink":hyperlinkUrl,
+                                             "masterurl":self.currentLoadedUrl,
+                                             "json_coords":json.dumps(hyperlinkCoords),
+                                             "shape":shape,
+                                             "description":description})
+        res_m = self.board.getClient().sendMessage(req_m) #送出 create_hyperlink
+        # bind 事件 到 hyperlink 區塊上
+        self.worldCanvas.tag_bind(hyperlinkUrl, "<Button-1>", self.hyperlinkOnClick)
+        self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
+        self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.defaultCursor)
         #TODO 動態顯示到 canvasframe 右中的 description frame
         
     #點擊超連結
