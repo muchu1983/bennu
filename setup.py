@@ -5,17 +5,19 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
-from setuptools import setup, find_packages
+from setuptools import setup,find_packages
 
 setup(
     name = "united",
-    version = "0.3.0",
+    version = "0.3.0.dev3",
     keywords = ("united"),
     description = "Image wiki system",
-    license = "BSD-3-Clause License",
-    install_requires = ["Pillow>=3.0.0"],
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
+    license = "BSD-3-Clause License",
+    url="https://github.com/muchu1983/united",
+    scripts=["united.py"],
     packages = find_packages(),
-    platforms = "any",
+    install_requires = ["Pillow>=3.0.0"],
+    platforms = "python 3.3",
 )
