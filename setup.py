@@ -9,7 +9,7 @@ from setuptools import setup,find_packages
 
 setup(
     name = "united",
-    version = "0.3.0.dev3",
+    version = "0.3.0.dev9",
     keywords = ("united"),
     description = "Image wiki system",
     author = "MuChu Hsu",
@@ -18,6 +18,8 @@ setup(
     url="https://github.com/muchu1983/united",
     scripts=["united.py"],
     packages = find_packages(),
+    include_package_data = True,
     install_requires = ["Pillow>=3.0.0"],
     platforms = "python 3.3",
 )
+
