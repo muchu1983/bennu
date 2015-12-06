@@ -13,7 +13,6 @@ from tkinter import Tk,Frame,Grid
 """
 啟動主程式
 """
-
 def main():
     #server start
     world = World()
@@ -37,3 +36,5 @@ def main():
     world.stopWorld()
     world.saveWorldToDb()
     
+if __name__ == "__main__":
+    main()

@@ -13,7 +13,7 @@ SQLiteStudio
 
 Notepad++ 執行設定值
 CTRL + F5
-cmd /k cd "$(CURRENT_DIRECTORY)" & c:\python33\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
+cmd /k cd "C:\Users\muchu\Desktop\pyWorkspace\UNITED_git_code" & c:\python33\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
 
 PyInstaller
 開啟 pip-win執行
