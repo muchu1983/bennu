@@ -1,0 +1,15 @@
+gitHub Url
+git@github.com:muchu1983/united.git
+
+開發使用的 python 版本
+3.3.5
+
+使用 pip-win 安裝的第三方庫
+Pillow
+
+免費的 SQLite3 Browser
+SQLiteStudio
+
+Notepad++ 執行設定值
+CTRL + F5
+cmd /k cd "$(CURRENT_DIRECTORY)" & c:\python32\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
