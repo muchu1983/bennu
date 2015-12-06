@@ -9,18 +9,17 @@ from setuptools import setup,find_packages
 
 setup(
     name = "united",
-    version = "0.3.0.dev10",
-    keywords = ("united"),
+    version = "0.3.0.dev14",
+    keywords = ("united image wiki json hyperlink Pillow"),
     description = "Image wiki system",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
     license = "BSD-3-Clause License",
     url="https://github.com/muchu1983/united",
-    scripts=["united.py"],
     packages = find_packages(),
     include_package_data = True,
     install_requires = ["Pillow>=3.0.0"],
     platforms = "python 3.3",
-    entry_points={"gui_scripts":["united.launcher:main"]}
+    entry_points={"gui_scripts":["united=united.launcher:main"]}
 )
 
