@@ -12,4 +12,4 @@ SQLiteStudio
 
 Notepad++ 執行設定值
 CTRL + F5
-cmd /k cd "$(CURRENT_DIRECTORY)" & c:\python32\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
+cmd /k cd "$(CURRENT_DIRECTORY)" & c:\python33\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
