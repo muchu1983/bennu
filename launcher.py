@@ -15,12 +15,10 @@ from tkinter import Tk,Frame,Grid
 """
 
 if __name__ == "__main__":
-    
     #server start
     world = World()
-    world.startHTTPServer()
+    world.startWorld()
     time.sleep(2)
-    
     #client start
     client = Client()
     root = Tk()
@@ -33,11 +31,9 @@ if __name__ == "__main__":
     Grid.grid_rowconfigure(root, 0, weight=1)
     Grid.grid_columnconfigure(root, 0, weight=1)
     root.mainloop()
-    
     #client stop
     client.closeConnection()
-
     #server stop
-    world.stopHTTPServer()
+    world.stopWorld()
     world.saveWorldToDb()
     
