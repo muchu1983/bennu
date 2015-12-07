@@ -16,11 +16,7 @@ CTRL + F5
 cmd /k cd "C:\Users\muchu\Desktop\pyWorkspace\UNITED_git_code" & c:\python33\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
 
 PyInstaller
-開啟 pip-win執行
-venv -c -i  pyi-env-name
-再啟動shell
-venv pyi-env-name
-shell 移動到United_code目錄下
+cmd shell cd 到 UNITED_git_code目錄下
 pyinstaller -F -w -i united_res/icon.ico united/launcher.py
 
 pypi muchu1983
