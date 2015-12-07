@@ -21,7 +21,7 @@ venv -c -i  pyi-env-name
 再啟動shell
 venv pyi-env-name
 shell 移動到United_code目錄下
-pyinstaller -F -w -i icon.ico united.py
+pyinstaller -F -w -i resource/icon.ico united/launcher.py
 
 pypi muchu1983
 登入 python setup.py register
