@@ -8,6 +8,7 @@ This file is part of BSD license
 import re
 import os
 from tkinter import PhotoImage
+from pkg_resources import resource_filename
 """
 顏文字 物件
 """
@@ -26,6 +27,6 @@ class Emoji:
         if m == None: return None
         name = m.group(1)
         if name not in self.emoji_list: return None
-        imgPath = os.getcwd() + "\\resource\\emoji\\" + name + ".png"
+        imgPath = resource_filename("resource.emoji", name + ".png")
         return imgPath
         
