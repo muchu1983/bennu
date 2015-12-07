@@ -13,7 +13,7 @@ from tkinter import Tk,Frame,Grid
 """
 啟動主程式
 """
-def main():
+def entry_point():
     #server start
     world = World()
     world.startWorld()
@@ -37,4 +37,4 @@ def main():
     world.saveWorldToDb()
     
 if __name__ == "__main__":
-    main()
+    entry_point()
