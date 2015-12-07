@@ -27,6 +27,6 @@ class Emoji:
         if m == None: return None
         name = m.group(1)
         if name not in self.emoji_list: return None
-        imgPath = resource_filename("resource.emoji", name + ".png")
+        imgPath = resource_filename("united_res.emoji", name + ".png")
         return imgPath
         

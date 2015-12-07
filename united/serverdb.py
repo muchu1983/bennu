@@ -19,7 +19,7 @@ class SQLite3Db:
     #建構子
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
-        dbPath = resource_filename("resource", "server.db")
+        dbPath = resource_filename("united_res", "server.db")
         if os.path.exists(dbPath):
             logging.info("connect to sqlite3 db.(server.db)")
             self.conn = sqlite3.connect(dbPath)
