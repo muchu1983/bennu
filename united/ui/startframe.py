@@ -9,6 +9,7 @@ from tkinter import Frame,Button,Grid,Canvas,font
 from united.ui.accounttoplevel import AccountToplevel
 from PIL import Image,ImageTk
 import os
+from pkg_resources import resource_filename
 """
 啟始頁
 """
@@ -19,7 +20,7 @@ class StartFrame:
     def __init__(self, master, gameboard):
         self.frame = Frame(master)
         self.board = gameboard
-        self.bgImg = Image.open(os.getcwd() + "\\resource\\bg.png")
+        self.bgImg = Image.open(resource_filename("united_res", "bg.png"))
         self.bgImgC = Canvas(self.frame)
         self.bgImgC.grid(row=0, column=0, rowspan=4, columnspan=3, sticky="news")
         self.bgImgC.bind("<Configure>", self.settingBgImage)
