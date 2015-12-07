@@ -45,7 +45,7 @@ class ImageAccessTest(unittest.TestCase):
     def test_post_and_load_image_data(self):
         logging.info("ImageAccessTest.test_post_and_load_image_data")
         default_url = "test"
-        source_img = Image.open(os.getcwd() + "\\resource\\icon.jpg")
+        source_img = Image.open(os.getcwd() + "\\resource\\icon.ico")
         """
             收到的 message 格式 (status 0->ok, 1->error)
             title = "post_image_data"

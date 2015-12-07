@@ -8,6 +8,7 @@ This file is part of BSD license
 import sqlite3
 import os
 import logging
+from pkg_resources import resource_filename
 
 """
 資料庫存取 類別 (Server)
@@ -18,7 +19,7 @@ class SQLite3Db:
     #建構子
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
-        dbPath = os.getcwd() + "\\resource\\server.db"
+        dbPath = resource_filename("resource", "server.db")
         if os.path.exists(dbPath):
             logging.info("connect to sqlite3 db.(server.db)")
             self.conn = sqlite3.connect(dbPath)
