@@ -9,7 +9,7 @@ from setuptools import setup,find_packages
 
 setup(
     name = "united",
-    version = "0.3.0.dev28",
+    version = "0.3.0.dev31",
     keywords = ["united", "image", "wiki"],
     description = "Image wiki system",
     author = "MuChu Hsu",
