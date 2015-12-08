@@ -44,10 +44,11 @@ class CanvasFrame:
         self.canvasYBar.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns")
         self.canvasXBar.config(command=self.canvasXViewUpdate)
         self.canvasYBar.config(command=self.canvasYViewUpdate)
-        #上右 地圖框內容
+        #上右 位址框內容
         mapFrame = Frame(self.frame, bg="green")
         mapFrame.grid(row=0, column=2, rowspan=1, columnspan=1, sticky="news")
-        #中右 描述框內容
+        #TODO 顯示目前位址url名稱及上一頁操作
+        #中右 超連結描述框內容
         self.descriptionFrame = Frame(self.frame, bg="yellow")
         self.descriptionFrame.grid(row=1, column=2, rowspan=1, columnspan=1, sticky="news")
         self.hyperlinkNameVar = StringVar()
