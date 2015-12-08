@@ -10,7 +10,6 @@ from setuptools import setup,find_packages
 with open("README.txt") as file:
     long_description = file.read()
 
-
 setup(
     name = "united",
     version = "0.3.0.dev31",

@@ -47,7 +47,7 @@ class CanvasFrame:
         #上右 位址框內容
         mapFrame = Frame(self.frame, bg="green")
         mapFrame.grid(row=0, column=2, rowspan=1, columnspan=1, sticky="news")
-        #TODO 顯示目前位址url名稱及上一頁操作
+        
         #中右 超連結描述框內容
         self.descriptionFrame = Frame(self.frame, bg="yellow")
         self.descriptionFrame.grid(row=1, column=2, rowspan=1, columnspan=1, sticky="news")
