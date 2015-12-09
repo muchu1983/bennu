@@ -76,25 +76,29 @@ class CanvasFrame:
         Grid.grid_columnconfigure(self.frame, 1, weight=0)
         Grid.grid_columnconfigure(self.frame, 2, weight=1)
         
+    # 由 screen (x,y) 轉換為 canvas (cx,cy)
+    def convertXY2CXCY(self, x, y):
+        cx = self.worldCanvas.canvasx(x)
+        cy = self.worldCanvas.canvasy(y)
+        return (cx, cy)
+        
     #canvas X 位移更新
     def canvasXViewUpdate(self, *args):
         self.worldCanvas.xview(*args)
         canvas_center_x = self.worldCanvas.winfo_width()/2
-        cx = self.worldCanvas.canvasx(canvas_center_x)
-        cy = self.worldCanvas.canvasy(10)
-        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy)) #位置保持在 (canvas_center, 10)
-        cx = self.worldCanvas.canvasx(10)
-        self.worldCanvas.coords(self.currentLoadedUrlDataId, (cx, cy)) #位置保持在(10, 10)
+        cxcy = self.convertXY2CXCY(canvas_center_x, 10)
+        self.worldCanvas.coords(self.loginedPlayerDataId, cxcy) #位置保持在 (canvas_center, 10)
+        cxcy = self.convertXY2CXCY(10, 10)
+        self.worldCanvas.coords(self.currentLoadedUrlDataId, cxcy) #位置保持在(10, 10)
         
     #canvas Y 位移更新
     def canvasYViewUpdate(self, *args):
         self.worldCanvas.yview(*args)
         canvas_center_x = self.worldCanvas.winfo_width()/2
-        cx = self.worldCanvas.canvasx(canvas_center_x)
-        cy = self.worldCanvas.canvasy(10)
-        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy)) #位置保持在 (canvas_center, 10)
-        cx = self.worldCanvas.canvasx(10)
-        self.worldCanvas.coords(self.currentLoadedUrlDataId, (cx, cy)) #位置保持在(10, 10)
+        cxcy = self.convertXY2CXCY(canvas_center_x, 10)
+        self.worldCanvas.coords(self.loginedPlayerDataId, cxcy) #位置保持在 (canvas_center, 10)
+        cxcy = self.convertXY2CXCY(10, 10)
+        self.worldCanvas.coords(self.currentLoadedUrlDataId, cxcy) #位置保持在(10, 10)
         
     #清除畫布內容 (保留部分 item)
     def cleanWorldCanvas(self):
@@ -108,9 +112,8 @@ class CanvasFrame:
         #繪製登入者資訊(一次性)
         if self.loginedPlayerDataId not in self.preservedCanvasWidgetId:
             canvas_center_x = self.worldCanvas.winfo_width()/2
-            cx = self.worldCanvas.canvasx(canvas_center_x)
-            cy = self.worldCanvas.canvasy(10)
-            self.loginedPlayerDataId = self.worldCanvas.create_text(cx, cy, anchor="n", font=font.Font(weight="bold"), fill="magenta")
+            cxcy = self.convertXY2CXCY(canvas_center_x, 10)
+            self.loginedPlayerDataId = self.worldCanvas.create_text(cxcy, anchor="n", font=font.Font(weight="bold"), fill="magenta")
             self.preservedCanvasWidgetId.append(self.loginedPlayerDataId)
         req_m = Message("get_logined_player", {"player_uuid":str(self.board.loginedPlayer.player_uuid)}) #取得登入玩家資料
         res_m = self.board.getClient().sendMessage(req_m)
@@ -194,8 +197,7 @@ class CanvasFrame:
         
     #讓正建立中的 超連結區塊 隨滑鼠指標移動
     def moveSettingHyperlinkArea(self, event):
-        cx = self.worldCanvas.canvasx(event.x)
-        cy = self.worldCanvas.canvasy(event.y)
+        (cx, cy) = self.convertXY2CXCY(event.x, event.y)
         areaid = self.worldCanvas.find_withtag(self.tempTag)
         self.worldCanvas.coords(areaid, (cx, cy, cx+50, cy+50))
         
@@ -232,8 +234,7 @@ class CanvasFrame:
         
     #點擊超連結
     def hyperlinkOnClick(self, event):
-        cx = self.worldCanvas.canvasx(event.x)
-        cy = self.worldCanvas.canvasy(event.y)
+        (cx, cy) = self.convertXY2CXCY(event.x, event.y)
         id = event.widget.find_closest(cx, cy)
         tags = event.widget.gettags(id)
         self.hyperlinkNameVar.set(tags[0])
@@ -247,8 +248,7 @@ class CanvasFrame:
         
     #雙擊 超連結
     def hyperlinkOnDoubleClick(self, event):
-        cx = self.worldCanvas.canvasx(event.x)
-        cy = self.worldCanvas.canvasy(event.y)
+        (cx, cy) = self.convertXY2CXCY(event.x, event.y)
         id = event.widget.find_closest(cx, cy)
         nextLoadedUrl = event.widget.gettags(id)[0]
         self.loadUrlImage(nextLoadedUrl)
