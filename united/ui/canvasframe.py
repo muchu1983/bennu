@@ -34,6 +34,7 @@ class CanvasFrame:
         self.currentLoadedUrl = None
         self.currentLoadedHyperlinkDescriptionDict = {}
         self.postNewImageButtonId = None
+        self.isShowHyperlink = True
         self.rootUrl = "root" #首頁
         self.tempTag = "setting_hyperlink_area"
         #畫布區內容
@@ -65,7 +66,12 @@ class CanvasFrame:
         commandFrame.grid(row=2, column=2, rowspan=2, columnspan=1, sticky="news")
         setHyperlinkAreaBtn = Button(commandFrame, text="新增\n連結區塊", command=self.setHyperlinkArea)
         setHyperlinkAreaBtn.grid(row=0, column=0, rowspan=1, columnspan=1, padx=5, pady=5, sticky="news")
+        self.showToggleBtnVar = StringVar()
+        self.showToggleBtnVar.set("隱藏連結")
+        hyperlinkShowToggleBtn = Button(commandFrame, textvariable=self.showToggleBtnVar, command=self.switchShowToggle)
+        hyperlinkShowToggleBtn.grid(row=1, column=0, rowspan=1, columnspan=1, padx=5, pady=5, sticky="news")
         Grid.grid_rowconfigure(commandFrame, 0, weight=1)
+        Grid.grid_rowconfigure(commandFrame, 1, weight=1)
         Grid.grid_columnconfigure(commandFrame, 0, weight=1)
         # 分配 grid 的比重
         Grid.grid_rowconfigure(self.frame, 0, weight=1)
@@ -162,6 +168,7 @@ class CanvasFrame:
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Double-Button-1>", self.hyperlinkOnDoubleClick)
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Enter>", self.hand2Cursor)
                 self.worldCanvas.tag_bind(hyperlinkUrl, "<Leave>", self.mouseLeaveHyperlinkArea)
+            self.configShowOrHideHyperlink() #顯示/隱藏 hyperlink
         else: #找不到對應於 url 的 圖片資料
             self.folderImg = ImageTk.PhotoImage(file=Emoji(":file_folder:").getImgPath())
             self.openFolderImg = ImageTk.PhotoImage(file=Emoji(":open_file_folder:").getImgPath())
@@ -261,3 +268,18 @@ class CanvasFrame:
     #滑鼠指標改為 預設
     def defaultCursor(self, event):
         self.worldCanvas.config(cursor="")
+        
+    #切換 顯示/隱藏 hyperlink
+    def switchShowToggle(self):
+        self.isShowHyperlink = not self.isShowHyperlink
+        self.showToggleBtnVar.set("隱藏連結" if self.isShowHyperlink else "顯示連結")
+        self.configShowOrHideHyperlink()
+        
+    #設定 hyperlink 顯示或隱藏
+    def configShowOrHideHyperlink(self):
+        for hyperlink in self.currentLoadedHyperlinkDescriptionDict.keys():
+            if self.isShowHyperlink:
+                self.worldCanvas.itemconfig(hyperlink, fill="blue", activefill="green", outline="black")
+            else:
+                self.worldCanvas.itemconfig(hyperlink, fill="", activefill="", outline="")
+                
