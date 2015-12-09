@@ -10,7 +10,7 @@ import base64
 import logging
 import json
 import tempfile
-from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog,StringVar
+from tkinter import Frame,Canvas,Button,Label,Grid,Scrollbar,font,filedialog,StringVar,ttk
 from tkinter import Message as TkMessage #名稱衝突
 from united.message import Message
 from united.emoji import Emoji
@@ -39,7 +39,7 @@ class CanvasFrame:
         #畫布區內容
         self.canvasXBar = Scrollbar(self.frame, orient="horizontal")
         self.canvasYBar = Scrollbar(self.frame, orient="vertical")
-        self.worldCanvas = Canvas(self.frame, bg="blue", xscrollcommand=self.canvasXBar.set, yscrollcommand=self.canvasYBar.set)
+        self.worldCanvas = Canvas(self.frame, xscrollcommand=self.canvasXBar.set, yscrollcommand=self.canvasYBar.set)
         self.worldCanvas.grid(row=0, column=0, rowspan=3, columnspan=1, sticky="nwes")
         self.canvasXBar.grid(row=3, column=0, rowspan=1, columnspan=1, sticky="ew")
         self.canvasYBar.grid(row=0, column=1, rowspan=4, columnspan=1, sticky="ns")
@@ -180,13 +180,14 @@ class CanvasFrame:
         imgFileName = filedialog.askopenfilename(filetypes=(("PNG files", "*.png"),
                                                             ("JPEG files", "*.jpg"),
                                                             ("GIF files", "*.gif")))
-        source_img = Image.open(imgFileName)
-        image_b64_data = base64.b64encode(open(imgFileName, "rb").read()).decode("utf-8")
-        req_m = Message("post_image_data", {"url":self.currentLoadedUrl,
-                                            "image_data":image_b64_data,
-                                            "image_mode":source_img.mode,
-                                            "image_size":source_img.size})
-        res_m = self.board.getClient().sendMessage(req_m)
+        if(os.path.isfile(imgFileName)): #確認檔案存在 傳送檔案
+            source_img = Image.open(imgFileName)
+            image_b64_data = base64.b64encode(open(imgFileName, "rb").read()).decode("utf-8")
+            req_m = Message("post_image_data", {"url":self.currentLoadedUrl,
+                                                "image_data":image_b64_data,
+                                                "image_mode":source_img.mode,
+                                                "image_size":source_img.size})
+            res_m = self.board.getClient().sendMessage(req_m)
         self.loadUrlImage(self.currentLoadedUrl)
         
     #建立超連結區塊
