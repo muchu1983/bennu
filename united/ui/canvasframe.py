@@ -29,6 +29,7 @@ class CanvasFrame:
         self.board = gameboard
         self.preservedCanvasWidgetId = []
         self.loginedPlayerDataId = None
+        self.currentLoadedUrlDataId = None
         self.currentLoadedImg = None
         self.currentLoadedUrl = None
         self.currentLoadedHyperlinkDescriptionDict = {}
@@ -47,7 +48,6 @@ class CanvasFrame:
         #上右 位址框內容
         mapFrame = Frame(self.frame, bg="green")
         mapFrame.grid(row=0, column=2, rowspan=1, columnspan=1, sticky="news")
-        
         #中右 超連結描述框內容
         self.descriptionFrame = Frame(self.frame, bg="yellow")
         self.descriptionFrame.grid(row=1, column=2, rowspan=1, columnspan=1, sticky="news")
@@ -82,7 +82,9 @@ class CanvasFrame:
         canvas_center_x = self.worldCanvas.winfo_width()/2
         cx = self.worldCanvas.canvasx(canvas_center_x)
         cy = self.worldCanvas.canvasy(10)
-        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy))
+        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy)) #位置保持在 (canvas_center, 10)
+        cx = self.worldCanvas.canvasx(10)
+        self.worldCanvas.coords(self.currentLoadedUrlDataId, (cx, cy)) #位置保持在(10, 10)
         
     #canvas Y 位移更新
     def canvasYViewUpdate(self, *args):
@@ -90,7 +92,9 @@ class CanvasFrame:
         canvas_center_x = self.worldCanvas.winfo_width()/2
         cx = self.worldCanvas.canvasx(canvas_center_x)
         cy = self.worldCanvas.canvasy(10)
-        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy))
+        self.worldCanvas.coords(self.loginedPlayerDataId, (cx, cy)) #位置保持在 (canvas_center, 10)
+        cx = self.worldCanvas.canvasx(10)
+        self.worldCanvas.coords(self.currentLoadedUrlDataId, (cx, cy)) #位置保持在(10, 10)
         
     #清除畫布內容 (保留部分 item)
     def cleanWorldCanvas(self):
@@ -106,7 +110,7 @@ class CanvasFrame:
             canvas_center_x = self.worldCanvas.winfo_width()/2
             cx = self.worldCanvas.canvasx(canvas_center_x)
             cy = self.worldCanvas.canvasy(10)
-            self.loginedPlayerDataId = self.worldCanvas.create_text(cx, cy, font=font.Font(weight="bold"), fill="magenta")
+            self.loginedPlayerDataId = self.worldCanvas.create_text(cx, cy, anchor="n", font=font.Font(weight="bold"), fill="magenta")
             self.preservedCanvasWidgetId.append(self.loginedPlayerDataId)
         req_m = Message("get_logined_player", {"player_uuid":str(self.board.loginedPlayer.player_uuid)}) #取得登入玩家資料
         res_m = self.board.getClient().sendMessage(req_m)
@@ -162,6 +166,7 @@ class CanvasFrame:
             self.worldCanvas.tag_bind("post_new_image_button", "<Button-1>", self.postNewImage)
             self.worldCanvas.tag_bind("post_new_image_button", "<Enter>", self.hand2Cursor)
             self.worldCanvas.tag_bind("post_new_image_button", "<Leave>", self.defaultCursor)
+        self.currentLoadedUrlDataId = self.worldCanvas.create_text(10, 10, text=self.currentLoadedUrl, anchor="nw", font=font.Font(weight="bold"), fill="magenta")
         self.worldCanvas.tag_raise(self.loginedPlayerDataId) #將被圖片蓋住的 使用者資料 移到最上層
         
     #新增圖片
