@@ -19,7 +19,7 @@ class HttpServerThread(threading.Thread):
     def __init__(self, handler):
         threading.Thread.__init__(self) #Thread 子類別的建構子必須加這行
         #http server
-        self.server_address = ('', 8000)
+        self.server_address = ("", 80)
         self.httpd = HTTPServer(self.server_address, handler)
 
     #覆寫 Thread 的 run 方法
