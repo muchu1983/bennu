@@ -16,7 +16,7 @@ class Client:
 
     #構構子
     def __init__(self):
-        self.conn = HTTPConnection("127.0.0.1", 8000)
+        self.conn = HTTPConnection("0.0.0.0", 8000)
 
     #對 server 送出訊息
     def sendMessage(self, message):
