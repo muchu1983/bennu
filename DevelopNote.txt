@@ -2,7 +2,7 @@ gitHub Url
 git@github.com:muchu1983/united.git
 
 開發使用的 python 版本
-3.3.5
+3.4.4
 
 使用 pip-win 安裝的第三方庫
 Pillow
@@ -13,7 +13,7 @@ SQLiteStudio
 
 Notepad++ 執行設定值
 CTRL + F5
-cmd /k cd "C:\Users\muchu\Desktop\pyWorkspace\UNITED_git_code" & c:\python33\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
+cmd /k cd "C:\Users\muchu\Desktop\pyWorkspace\UNITED_git_code" & c:\python34\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
 
 PyInstaller
 cmd shell cd 到 UNITED_git_code目錄下
