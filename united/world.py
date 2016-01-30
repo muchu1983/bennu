@@ -12,8 +12,6 @@ from united.httpserverthread import HttpServerThread
 from united.worldthread import WorldThread
 from united.jsonrequesthandler import JsonRequestHandler
 from united.mod.accountmod import AccountMod
-from united.mod.imagedatamod import ImageDataMod
-from united.mod.hyperlinkmod import HyperlinkMod
 
 """
 世界 類別 (從 HttpServerThread 物件取得 client 傳來的 json 指令)
@@ -25,15 +23,9 @@ class World:
     def __init__(self):
         logging.basicConfig(level=logging.WARNING)
         self.accountMod = AccountMod()
-        self.imageDataMod = ImageDataMod()
-        self.hyperlinkMod = HyperlinkMod()
         self.dispatcherDict = {"create_player_account":self.accountMod,
                                 "player_account_login":self.accountMod,
-                                "get_logined_player":self.accountMod,
-                                "post_image_data":self.imageDataMod,
-                                "load_image_data":self.imageDataMod,
-                                "create_hyperlink":self.hyperlinkMod,
-                                "list_hyperlink_on_url":self.hyperlinkMod}
+                                "get_logined_player":self.accountMod}
         self.loadWorldFromDb()
         
     #讀取
