@@ -13,7 +13,7 @@ with open("README.txt") as file:
 
 setup(
     name = "united",
-    version = "0.3.1.dev1",
+    version = "0.3.1.dev3",
     keywords = ["united"],
     description = "united utility",
     author = "MuChu Hsu",
@@ -25,8 +25,8 @@ setup(
     include_package_data = True,
     install_requires = ["Pillow>=3.0.0"],
     platforms = "python 3.3",
-    entry_points={"console_scripts":["united=united.launcher:entry_point"]},
-    classifiers=[
+    entry_points = {"console_scripts":["united=united.launcher:entry_point"]},
+    classifiers = [
         "Development Status :: 3 - Alpha",
         "Environment :: Win32 (MS Windows)",
         "Environment :: X11 Applications :: GTK",
