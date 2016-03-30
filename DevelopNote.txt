@@ -8,12 +8,6 @@ git@github.com:muchu1983/united.git
 Pillow
 PyInstaller
 
-kivy 安裝 (python ver 3.4)
-pip install --upgrade pip wheel setuptools
-pip install docutils pygments pypiwin32
-pip install kivy.deps.sdl2 kivy.deps.glew --extra-index-url https://kivy.org/downloads/packages/simple/
-pip install kivy
-
 免費的 SQLite3 Browser
 SQLiteStudio
 

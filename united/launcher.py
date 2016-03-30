@@ -1,14 +1,14 @@
-import kivy
-kivy.require('1.9.0')
+# -*- coding: utf-8 -*-
+"""
+Copyright (C) 2015, MuChu Hsu
+Contributed by Muchu Hsu (muchu1983@gmail.com)
+This file is part of BSD license
 
-from kivy.app import App
-from kivy.uix.label import Label
+<https://opensource.org/licenses/BSD-3-Clause>
+"""
 
-class MyApp(App):
+def entry_point():
+    print("entry_point")
 
-    def build(self):
-        return Label(text='Hello world')
-
-
-if __name__ == '__main__':
-    MyApp().run()
+if __name__ == "__main__":
+    entry_point()

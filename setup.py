@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Copyright (C) 2015, MuChu Hsu
 Contributed by Muchu Hsu (muchu1983@gmail.com)
@@ -12,9 +13,9 @@ with open("README.txt") as file:
 
 setup(
     name = "united",
-    version = "0.3.0.dev31",
-    keywords = ["united", "image", "wiki"],
-    description = "Image wiki system",
+    version = "0.3.1.dev1",
+    keywords = ["united"],
+    description = "united utility",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
     license = "BSD 3-Clause License",
@@ -39,7 +40,6 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Programming Language :: Python :: 3.3",
         "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Multimedia :: Graphics :: Viewers",
         ],
 )
 
