@@ -6,9 +6,11 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
+from tkinter import Tk
 
 def entry_point():
-    print("entry_point")
+    root = Tk()
+    root.mainloop()
 
 if __name__ == "__main__":
     entry_point()
