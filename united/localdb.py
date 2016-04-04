@@ -16,7 +16,7 @@ class SQLite3Db:
     #建構子
     def __init__(self, strResFolderPath=None):
         logging.basicConfig(level=logging.INFO)
-        dbPath = os.sep.join(strResFolderPath, "local.db")
+        dbPath = os.sep.join([strResFolderPath, "local.db"])
         logging.info("connect to sqlite3 db.")
         self.conn = sqlite3.connect(dbPath) #建立連線
             
