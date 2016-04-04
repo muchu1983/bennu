@@ -10,30 +10,22 @@ import os
 import logging
 from pkg_resources import resource_filename
 """
-資料庫存取 類別
+本機端資料庫存取
 """
 class SQLite3Db:
 
     #建構子
-    def __init__(self):
+    def __init__(self, strResFolderPath=None):
         logging.basicConfig(level=logging.INFO)
-        dbPath = resource_filename("cameo_res", "local.db")
-        if os.path.exists(dbPath):#建立連線
-            logging.info("connect to sqlite3 db.")
-            self.conn = sqlite3.connect(dbPath)
-        else: #初始化資料庫並建立連線
-            logging.info("connect to sqlite3 db with initialization.")
-            self.conn = sqlite3.connect(dbPath)
-            c = self.conn.cursor()
-            c.execute("""CREATE TABLE table
-                            (id INTEGER PRIMARY KEY)""")
-            self.conn.commit()
-
+        dbPath = resource_filename(strResFolderPath, "local.db")
+        logging.info("connect to sqlite3 db.")
+        self.conn = sqlite3.connect(dbPath) #建立連線
+            
     #解構子
     def __del__(self):
         logging.info("close sqlite3 db connection.")
         self.conn.close() #關閉資料庫連線
-
+        
     # 執行 SQL 並 commit (適用於 INSERT、UPDATE、DELETE)
     def commitSQL(self, strSQL=None):
         c = self.conn.cursor()
