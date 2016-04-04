@@ -1,12 +1,12 @@
 == Install:
 
-$pip install united
+$pip install bennu
 
 == Useage:
 
-$united
+$bennu
 
 == Uninstall:
 
-$pip uninstall united
+$pip uninstall bennu
 

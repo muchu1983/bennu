@@ -12,20 +12,20 @@ with open("README.txt") as file:
     long_description = file.read()
 
 setup(
-    name = "united",
+    name = "bennu",
     version = "0.3.1.dev8",
-    keywords = ["united"],
-    description = "united utility",
+    keywords = ["bennu", "utility", "muchu"],
+    description = "muchu's utility module",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
     license = "BSD 3-Clause License",
-    url="https://github.com/muchu1983/united",
+    url="https://github.com/muchu1983/bennu",
     long_description=long_description,
     packages = find_packages(),
     include_package_data = True,
     install_requires = ["Pillow>=3.0.0"],
     platforms = "python 3.3",
-    entry_points = {"console_scripts":["united=united.launcher:entry_point"]},
+    entry_points = {"console_scripts":["bennu=bennu.launcher:entry_point"]},
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Environment :: Win32 (MS Windows)",
