@@ -16,9 +16,10 @@ class SQLite3Db:
     #建構子
     def __init__(self, strResFolderPath=None):
         logging.basicConfig(level=logging.INFO)
-        dbPath = os.sep.join([strResFolderPath, "local.db"])
+        strDbPath = os.sep.join([strResFolderPath, "local.db"])
         logging.info("connect to sqlite3 db.")
-        self.conn = sqlite3.connect(dbPath) #建立連線
+        self.conn = sqlite3.connect(strDbPath) #建立連線
+        self.conn.row_factory = sqlite3.Row #資料封裝為 Row 物件
             
     #解構子
     def __del__(self):

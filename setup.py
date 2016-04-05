@@ -13,7 +13,7 @@ with open("README.txt") as file:
 
 setup(
     name = "bennu",
-    version = "0.3.1.dev8",
+    version = "0.3.1.dev13",
     keywords = ["bennu", "utility", "muchu"],
     description = "muchu's utility module",
     author = "MuChu Hsu",
