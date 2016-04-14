@@ -31,6 +31,7 @@ class SQLite3Db:
         c = self.conn.cursor()
         c.execute(strSQL)
         self.conn.commit()
+        return c.lastrowid #回傳最後 INSERT 的 row id
 
     # 執行 SQL 並 fetchall 資料 (適用於 SELECT)
     def fetchallSQL(self, strSQL=None):
