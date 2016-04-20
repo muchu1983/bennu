@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Copyright (C) 2015, MuChu Hsu
 Contributed by Muchu Hsu (muchu1983@gmail.com)
