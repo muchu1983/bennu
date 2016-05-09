@@ -8,6 +8,7 @@ This file is part of BSD license
 import sqlite3
 import os
 import logging
+from pymongo import MongoClient
 """
 本機端資料庫存取
 """
@@ -38,3 +39,14 @@ class SQLite3Db:
         c = self.conn.cursor()
         c.execute(strSQL)
         return c.fetchall()
+        
+class MongoDb:
+    
+    #建構子
+    def __init__(self):
+        logging.info("connect to mongo db.")
+        self.client = MongoClient("mongodb://localhost:27017/")
+        
+    #取得 mongodb client
+    def getClient(self):
+        return self.client
