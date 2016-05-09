@@ -47,6 +47,11 @@ class MongoDb:
         logging.info("connect to mongo db.")
         self.client = MongoClient("mongodb://localhost:27017/")
         
+    #解構子
+    def __del__(self):
+        logging.info("close mongo db connection.")
+        self.client.close() #關閉資料庫連線
+        
     #取得 mongodb client
     def getClient(self):
         return self.client
