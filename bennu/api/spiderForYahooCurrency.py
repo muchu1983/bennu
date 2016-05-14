@@ -13,6 +13,7 @@ import time
 import datetime
 import re
 import random
+import pkg_resources
 from bennu.localdb import LocalDbForCurrencyApi
 
 """
@@ -29,12 +30,17 @@ class SpiderForYahooCurrency:
     def getDriver(self):
         driver = None
         if os.name == "nt":
+            #chrome driver
+            #chromeDriverExeFilePath = pkg_resources.resource_filename("bennu_res", "chromedriver.exe")
             #chromeDriverExeFilePath = os.sep.join(("bennu_res", "chromedriver.exe"))
             #driver = webdriver.Chrome(chromeDriverExeFilePath)
-            phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs.exe"))
+            #phantomjs driver
+            phantomjsDriverExeFilePath = pkg_resources.resource_filename("bennu_res", "phantomjs.exe")
+            #phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs.exe"))
             driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
         if os.name == "posix":
-            phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs"))
+            phantomjsDriverExeFilePath = pkg_resources.resource_filename("bennu_res", "phantomjs")
+            #phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs"))
             driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
         return driver
         
