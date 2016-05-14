@@ -8,6 +8,7 @@ This file is part of BSD license
 import sqlite3
 import os
 import logging
+import pkg_resources
 from pymongo import MongoClient
 """
 本機端資料庫存取
@@ -17,7 +18,7 @@ class SQLite3Db:
     #建構子
     def __init__(self, strResFolderPath=None):
         logging.basicConfig(level=logging.INFO)
-        strDbPath = os.sep.join([strResFolderPath, "local.db"])
+        strDbPath = pkg_resources.resource_filename(strResFolderPath, "local.db")
         logging.info("connect to sqlite3 db.")
         self.conn = sqlite3.connect(strDbPath) #建立連線
         self.conn.row_factory = sqlite3.Row #資料封裝為 Row 物件
