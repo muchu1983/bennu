@@ -55,3 +55,10 @@ class MongoDb:
     #取得 mongodb client
     def getClient(self):
         return self.client
+        
+#匯率API
+class LocalDbForCurrencyApi:
+    
+    #建構子
+    def __init__(self):
+        self.mongodb = MongoDb().getClient().localdb
