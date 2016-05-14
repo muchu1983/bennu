@@ -27,10 +27,15 @@ class SpiderForYahooCurrency:
         
     #取得 selenium driver 物件
     def getDriver(self):
-        #chromeDriverExeFilePath = os.sep.join(("bennu_res", "chromedriver.exe"))
-        #driver = webdriver.Chrome(chromeDriverExeFilePath)
-        phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs.exe"))
-        driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
+        driver = None
+        if os.name == "nt":
+            #chromeDriverExeFilePath = os.sep.join(("bennu_res", "chromedriver.exe"))
+            #driver = webdriver.Chrome(chromeDriverExeFilePath)
+            phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs.exe"))
+            driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
+        if os.name == "posix":
+            phantomjsDriverExeFilePath = os.sep.join(("bennu_res", "phantomjs"))
+            driver = webdriver.PhantomJS(phantomjsDriverExeFilePath)
         return driver
         
     #初始化 selenium driver 物件
