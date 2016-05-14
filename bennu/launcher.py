@@ -6,11 +6,14 @@ This file is part of BSD license
 
 <https://opensource.org/licenses/BSD-3-Clause>
 """
-from tkinter import Tk
+import logging
+import bennu_api.flaskrunner as flaskrunner
 
 def entry_point():
-    root = Tk()
-    root.mainloop()
+    #logging 層級設定
+    logging.basicConfig(level=logging.INFO)
+    #啟動 flask http service (port 5000)
+    flaskrunner.start_flask_server()
 
 if __name__ == "__main__":
     entry_point()
