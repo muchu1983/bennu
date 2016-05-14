@@ -1,3 +1,4 @@
 include LICENSE
 recursive-include bennu_res *
+recursive-include bennu_api *
 recursive-exclude test *
