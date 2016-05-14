@@ -12,8 +12,8 @@ import logging
 from flask import Flask
 from flask import request
 from flask import jsonify
-from bennu_api.spiderForYahooCurrency import SpiderForYahooCurrency
-import bennu_api.apis as apis
+from bennu.api.spiderForYahooCurrency import SpiderForYahooCurrency
+import bennu.api.apis as apis
 
 app = Flask(__name__.split(".")[0])
 

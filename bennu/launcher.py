@@ -7,7 +7,7 @@ This file is part of BSD license
 <https://opensource.org/licenses/BSD-3-Clause>
 """
 import logging
-import bennu_api.flaskrunner as flaskrunner
+import bennu.api.flaskrunner as flaskrunner
 
 def entry_point():
     #logging 層級設定

@@ -8,7 +8,7 @@ This file is part of BSD license
 """
 import unittest
 import logging
-from bennu_api.spiderForYahooCurrency import SpiderForYahooCurrency
+from bennu.api.spiderForYahooCurrency import SpiderForYahooCurrency
 """
 測試抓取 https://tw.money.yahoo.com/currency 即時匯率
 """

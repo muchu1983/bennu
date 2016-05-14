@@ -8,7 +8,7 @@ This file is part of BSD license
 """
 import unittest
 import logging
-import bennu_api.apis as apis
+import bennu.api.apis as apis
 """
 測試 api 功能
 """
