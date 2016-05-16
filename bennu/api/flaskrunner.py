@@ -38,6 +38,17 @@ def exchangeCurrency():
                form=strFromCurrency,
                to=strToCurrency)
                
+#取得 facebook 使用者資料
+@app.route("/fb_oauth", methods=["GET"])
+def fbOauth():
+    #接收授權碼
+    strAuthCode = request.args.get("code", None, type=str)
+    #Oauth 程序
+    (strUserID, strUserName, strUserEmail) = apis.getFacebookUserDataByOauth(strAuthCode=strAuthCode)
+    return jsonify(strUserID=strUserID,
+               strUserName=strUserName,
+               strUserEmail=strUserEmail)
+               
 #獨立執行 更新匯率資料庫 spider
 class SpiderThread(threading.Thread):
     #thread 建構子
