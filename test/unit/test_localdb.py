@@ -24,7 +24,7 @@ class LocalDbTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    #測試 取得 client
+    #測試 取得 mongo db client
     def test_getMongoDbClient(self):
         logging.info("LocalDbTest.test_getMongoDbClient")
         self.assertIsNotNone(self.mongodb.getClient())
