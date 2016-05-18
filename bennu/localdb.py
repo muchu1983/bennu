@@ -13,6 +13,7 @@ from bennu.filesystemutility import FileSystemUtility
 """
 本機端資料庫存取
 """
+#localhost SQLite3 資料庫
 class SQLite3Db:
 
     #建構子
@@ -42,6 +43,7 @@ class SQLite3Db:
         c.execute(strSQL)
         return c.fetchall()
         
+#localhost MongoDb 資料庫
 class MongoDb:
     
     #建構子
