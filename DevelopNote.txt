@@ -12,7 +12,7 @@ PyInstaller
 SQLiteStudio
 
 Notepad++ 執行設定值
-CTRL + F5
+CTRL + F6
 cmd /k cd "C:\Users\muchu\Desktop\pyWorkspace\BENNU_git_code" & c:\python34\python "$(FULL_CURRENT_PATH)" & ECHO & PAUSE & EXIT
 
 PyInstaller
