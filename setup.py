@@ -13,7 +13,7 @@ with open("README.txt") as file:
 
 setup(
     name = "bennu",
-    version = "0.4.1a4",
+    version = "0.4.1a5",
     author = "MuChu Hsu",
     author_email = "muchu1983@gmail.com",
     maintainer = "MuChu Hsu",

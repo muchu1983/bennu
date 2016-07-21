@@ -19,7 +19,7 @@ class CameoMongoDb:
     #建構子
     def __init__(self):
         logging.info("connect to cameo 210.65.11.231 mongo db.")
-        self.client = MongoClient("mongodb://210.65.11.231:27017/")
+        self.client = MongoClient("mongodb://root:CameoRoot12#$@210.65.11.231/")
         
     #解構子
     def __del__(self):
