@@ -9,6 +9,7 @@ This file is part of BSD license
 import logging
 import smtplib
 from email.mime.text import MIMEText
+from email.header import Header
 
 class EmailUtility:
     
@@ -26,10 +27,10 @@ class EmailUtility:
             strAccount = self.DEFAULT_ACCOUNT
             strPassword = self.DEFAULT_PASSWORD
         #郵件內容
-        msg = MIMEText(strMsg, "html")
-        msg["Subject"] = strSubject
-        msg["From"] = strFrom
-        msg["To"] = strTo
+        msg = MIMEText(strMsg, "html", "utf-8")
+        msg["Subject"] = Header(strSubject, "utf-8")
+        msg["From"] = Header(strFrom, "utf-8")
+        msg["To"] = Header(strTo, "utf-8")
         #傳送
         server = smtplib.SMTP(strSmtp)
         server.ehlo()
