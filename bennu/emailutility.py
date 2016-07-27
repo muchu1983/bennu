@@ -26,7 +26,7 @@ class EmailUtility:
             strAccount = self.DEFAULT_ACCOUNT
             strPassword = self.DEFAULT_PASSWORD
         #郵件內容
-        msg = MIMEText(strMsg)
+        msg = MIMEText(strMsg, "html")
         msg["Subject"] = strSubject
         msg["From"] = strFrom
         msg["To"] = strTo
