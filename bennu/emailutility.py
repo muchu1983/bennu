@@ -22,7 +22,7 @@ class EmailUtility:
         
     #寄送 email
     def sendEmail(self, strSubject=None, strFrom=None, strTo=None, strMsg=None, lstStrTarget=None, strSmtp=None, strAccount=None, strPassword=None):
-        if not (strSmtp and strAccount and strPassword):
+        if (strSmtp and strAccount and strPassword):
             strSmtp = self.DEFAULT_SMTP
             strAccount = self.DEFAULT_ACCOUNT
             strPassword = self.DEFAULT_PASSWORD
