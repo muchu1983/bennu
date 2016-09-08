@@ -34,7 +34,10 @@ class EmailUtilityTest(unittest.TestCase):
             strFrom="public.muchu1983",
             strTo="me",
             strMsg="內容：許公蓋",
-            lstStrTarget=["muchu1983@gmail.com"]
+            lstStrTarget=["muchu1983@gmail.com"],
+            strSmtp="smtp.gmail.com:587",
+            strAccount="public.muchu1983@gmail.com",
+            strPassword="bee520520bee"
         )
 
 #測試開始

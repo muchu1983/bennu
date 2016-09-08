@@ -35,6 +35,7 @@ class EmailUtility:
         server = smtplib.SMTP(strSmtp)
         server.ehlo()
         server.starttls()
+        logging.info("smtp login: %s %s"%(strAccount, strPassword))
         server.login(strAccount, strPassword)
         server.sendmail(strAccount, lstStrTarget, msg.as_string())
         server.quit()
